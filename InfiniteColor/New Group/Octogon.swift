@@ -127,8 +127,9 @@ class Octogon: SKSpriteNode {
     func colorize() {
         for index in 0..<8 {
             let part = self.childNode(withName: OctogonService.shared.parts[index])
-            let colorize = SKAction.colorize(with: .black, colorBlendFactor: 1, duration: 0.5)
-            part?.alpha = 0.7
+            let color = UIColor(red: 0, green: 0, blue: 0, alpha: 0.65)
+            let colorize = SKAction.colorize(with: color, colorBlendFactor: 0.95, duration: 0.5)
+//            part?.alpha = 0.7
             part?.run(colorize)
         }
     }

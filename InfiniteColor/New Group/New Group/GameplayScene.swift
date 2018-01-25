@@ -29,6 +29,7 @@ class GameplayScene: SKScene {
     }
     
     func initialize() {
+        OctogonService.shared.scaleValue = 1.25
         scoreLabel = self.childNode(withName: "ScoreLabel") as? SKLabelNode
         Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(createFirstOctogons), userInfo: nil, repeats: false)
     }
@@ -47,16 +48,10 @@ class GameplayScene: SKScene {
             presentMainMenu()
         }else {
             if canTouch {
-                for _ in touches {
-                    moveCircle()
-                    createOctogon()
-                    actualOctogon?.colorize()
-                    slowOctogons()
-                    verifyOctogons()
-                    if !isScaling {
-                        isScaling = true
-                        OctogonService.shared.scaleValue = 1.25
-                    }
+                moveCircle()
+                if !isScaling {
+                    isScaling = true
+                    OctogonService.shared.scaleValue = 1.25
                 }
             }
         }
@@ -93,23 +88,33 @@ class GameplayScene: SKScene {
         return distance.squareRoot()
     }
     
+    func canMoveToNextOctogon() -> Bool {
+        if let octogon =  lastOctogon, let part = octogon.childNode(withName: CircleService.shared.nextPartColor) as? SKSpriteNode {
+            return octogon.size.height/distanceBetween(circle: circle, and: part) > 2.75
+        }
+        return false
+    }
+    
     func moveCircle() {
         canTouch = false
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2*CircleService.shared.animationDuration) { self.canTouch = true }
         
-        if let octogon =  lastOctogon, let part = octogon.childNode(withName: CircleService.shared.nextPartColor) as? SKSpriteNode {
-            if octogon.size.height/distanceBetween(circle: circle, and: part) > 2.75 {
+            if canMoveToNextOctogon() {
                 incrementScore()
+                createOctogon()
+                actualOctogon?.colorize()
+                slowOctogons()
+                verifyOctogons()
+                
                 circle.scaleDownAnimation()
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + CircleService.shared.animationDuration, execute: {
-                    self.createCircle(for: octogon)
+                    self.createCircle(for: self.actualOctogon!)
                     self.circle.scaleUpAnimation()
                 })
             } else {
                 // end game situation
                 endGameSituation()
             }
-        }
     }
     
     func incrementScore() {
