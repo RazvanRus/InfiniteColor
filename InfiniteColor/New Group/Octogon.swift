@@ -12,8 +12,8 @@ class Octogon: SKSpriteNode {
     var spinningFactor: CGFloat = 1
     var animationTimer = Timer()
     var initialSize: CGFloat = 150
-
-
+    
+    
     func initialize(spinningFactor: CGFloat) {
         OctogonService.shared.shuffleParts()
         createOctogon()
@@ -49,7 +49,7 @@ class Octogon: SKSpriteNode {
         }
         part.position = CGPoint(x: positionX, y: positionY)
         part.zRotation = OctogonService.shared.rotationAngles[index]
-
+        
         self.addChild(part)
     }
     
@@ -92,31 +92,45 @@ class Octogon: SKSpriteNode {
     }
     
     
+    func stopAnimation() {
+        animationTimer.invalidate()
+        self.removeAllActions()
+    }
+    
     @objc
-    func animate() {
+    func startAnimation() {
         let rotate = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*spinningFactor, duration: OctogonService.shared.animationDuration)
         let scale = SKAction.scale(by: OctogonService.shared.scaleValue, duration: OctogonService.shared.animationDuration)
         let group = SKAction.group([rotate,scale])
         self.run(group)
-                
+        
         animationTimer.invalidate()
-        animationTimer = Timer.scheduledTimer(timeInterval: OctogonService.shared.animationDuration, target: self, selector: #selector(animate), userInfo: nil, repeats: false)
+        animationTimer = Timer.scheduledTimer(timeInterval: OctogonService.shared.animationDuration, target: self, selector: #selector(startAnimation), userInfo: nil, repeats: false)
     }
     
     func slowAnimation() {
         self.removeAllActions()
-        let rotate1 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.05*spinningFactor, duration: OctogonService.shared.animationDuration/5)
-        let rotate2 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.04*spinningFactor, duration: OctogonService.shared.animationDuration/5)
-        let rotate3 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.03*spinningFactor, duration: OctogonService.shared.animationDuration/5)
-        let rotate4 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.04*spinningFactor, duration: OctogonService.shared.animationDuration/5)
-        let rotate5 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.05*spinningFactor, duration: OctogonService.shared.animationDuration/5)
+        let rotate1 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.015*spinningFactor, duration: OctogonService.shared.animationDuration/10)
+        let rotate2 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.01*spinningFactor, duration: OctogonService.shared.animationDuration/10)
+        let rotate3 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.0075*spinningFactor, duration: OctogonService.shared.animationDuration/10)
+        let rotate4 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.01*spinningFactor, duration: OctogonService.shared.animationDuration/10)
+        let rotate5 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.015*spinningFactor, duration: OctogonService.shared.animationDuration/10)
         let sequence = SKAction.sequence([rotate1,rotate2,rotate3,rotate4,rotate5])
-        let scale = SKAction.scale(by: OctogonService.shared.scaleValue, duration: OctogonService.shared.animationDuration)
+        let scale = SKAction.scale(by: OctogonService.shared.scaleValue*0.91, duration: OctogonService.shared.animationDuration/2)
         let group = SKAction.group([sequence,scale])
         self.run(group)
         
         animationTimer.invalidate()
-        animationTimer = Timer.scheduledTimer(timeInterval: OctogonService.shared.animationDuration, target: self, selector: #selector(animate), userInfo: nil, repeats: false)
+        animationTimer = Timer.scheduledTimer(timeInterval: OctogonService.shared.animationDuration/2, target: self, selector: #selector(startAnimation), userInfo: nil, repeats: false)
+    }
+    
+    func colorize() {
+        for index in 0..<8 {
+            let part = self.childNode(withName: OctogonService.shared.parts[index])
+            let colorize = SKAction.colorize(with: .black, colorBlendFactor: 1, duration: 0.5)
+            part?.alpha = 0.7
+            part?.run(colorize)
+        }
     }
 }
 

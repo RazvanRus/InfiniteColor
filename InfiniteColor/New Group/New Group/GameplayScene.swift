@@ -10,28 +10,54 @@ import SpriteKit
 
 class GameplayScene: SKScene {
     var spinningFactor: CGFloat = 1
-    var lastOctogon: Octogon? = nil
-    var actualOctogon: Octogon? = nil
+    
+    var lastOctogon: Octogon?
+    var actualOctogon: Octogon?
     var octogons: [Octogon] = []
     var circle = Circle()
     
+    var isScaling = true
     var canTouch = true
+    var canMoveToMainMenu = false
+    
+    var score = 0
+    var scoreLabel: SKLabelNode?
     
     override func didMove(to view: SKView) {
         initialize()
+        initializeDelegateNotifications()
     }
     
     func initialize() {
+        scoreLabel = self.childNode(withName: "ScoreLabel") as? SKLabelNode
         Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(createFirstOctogons), userInfo: nil, repeats: false)
     }
     
+    override func update(_ currentTime: TimeInterval) {
+        if let actualOct = actualOctogon {
+            if isScaling && actualOct.size.width > CGFloat(500) {
+                OctogonService.shared.scaleValue = 1
+                isScaling = false
+            }
+        }
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if canTouch {
-            for _ in touches {
-                moveCircle()
-                createOctogon()
-                slowOctogons()
-                verifyOctogons()
+        if canMoveToMainMenu {
+            presentMainMenu()
+        }else {
+            if canTouch {
+                for _ in touches {
+                    moveCircle()
+                    createOctogon()
+                    actualOctogon?.colorize()
+                    slowOctogons()
+                    verifyOctogons()
+                    if !isScaling {
+                        isScaling = true
+                        OctogonService.shared.scaleValue = 1.25
+                    }
+                }
             }
         }
     }
@@ -56,7 +82,6 @@ class GameplayScene: SKScene {
         }
     }
     
-    
     func distanceBetween(circle: Circle, and part: SKSpriteNode) -> CGFloat {
         guard let circlePositionRelative = circle.scene?.convert(circle.position, from: circle.parent!) else {return 1000}
         guard let partPositionRelative = part.scene?.convert(part.position, from: part.parent!) else {return 1000}
@@ -70,26 +95,27 @@ class GameplayScene: SKScene {
     
     func moveCircle() {
         canTouch = false
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) { self.canTouch = true }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2*CircleService.shared.animationDuration) { self.canTouch = true }
         
         if let octogon =  lastOctogon, let part = octogon.childNode(withName: CircleService.shared.nextPartColor) as? SKSpriteNode {
-            
             if octogon.size.height/distanceBetween(circle: circle, and: part) > 2.75 {
+                incrementScore()
                 circle.scaleDownAnimation()
-                CircleService.shared.moveToNextPart()
-                createCircle(for: octogon)
-                circle.scaleUpAnimation()
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + CircleService.shared.animationDuration, execute: {
+                    self.createCircle(for: octogon)
+                    self.circle.scaleUpAnimation()
+                })
             } else {
                 // end game situation
-                presentMainMenu()
+                endGameSituation()
             }
         }
     }
     
-    func presentMainMenu() {
-        if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
-            mainMenuScene.scaleMode = .aspectFill
-            self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
+    func incrementScore() {
+        if let scoreText = scoreLabel?.text,
+            let score = Int(scoreText) {
+            scoreLabel?.text = "\(score+1)"
         }
     }
 }
@@ -101,13 +127,13 @@ extension GameplayScene {
     @objc
     func createFirstOctogons() {
         let octogon = Octogon()
-        octogon.setSize(CGSize(width: 240, height: 240))
+        octogon.setSize(CGSize(width: 230, height: 230))
         octogon.initialize(spinningFactor: spinningFactor)
         octogon.setPosition(CGPoint(x: 0, y: 0))
         self.addChild(octogon)
         
         spinningFactor *= -1
-        octogon.animate()
+        octogon.startAnimation()
         octogons.append(octogon)
         
         let secoundOctogon = Octogon()
@@ -117,10 +143,11 @@ extension GameplayScene {
         self.addChild(secoundOctogon)
         
         spinningFactor *= -1
-        secoundOctogon.animate()
+        secoundOctogon.startAnimation()
         
         actualOctogon = octogon
         lastOctogon = secoundOctogon
+        actualOctogon?.colorize()
         
         octogons.append(secoundOctogon)
         
@@ -131,14 +158,14 @@ extension GameplayScene {
         let octogon = Octogon()
         octogon.setPosition(CGPoint(x: 0, y: 0))
         var size: CGFloat = 150
-        if let lastOct = lastOctogon { size = lastOct.size.height * 0.625 }
+        if let lastOct = lastOctogon { size = lastOct.size.height * 0.65 }
         octogon.setSize(CGSize(width: size, height: size))
         octogon.initialize(spinningFactor: spinningFactor)
         
         self.addChild(octogon)
         
         spinningFactor *= -1
-        octogon.animate()
+        octogon.startAnimation()
         octogons.append(octogon)
         
         actualOctogon = lastOctogon
@@ -146,6 +173,8 @@ extension GameplayScene {
     }
     
     func createCircle(for octogon: Octogon) {
+        CircleService.shared.moveToNextPart()
+        
         circle = Circle()
         circle.initialize()
         
@@ -159,6 +188,62 @@ extension GameplayScene {
 
 
 
+// MARK: endGameSituation
+extension GameplayScene {
+    func endGameSituation() {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) { self.canMoveToMainMenu = true }
+        if let scoreText = scoreLabel?.text, let score = Int(scoreText) {
+            createEndGamePannel(withScore: score)
+        } else { createEndGamePannel(withScore: 0) }
+    }
+    
+    func createEndGamePannel(withScore score: Int) {
+        let endGamePannel = EndGamePannel()
+        endGamePannel.initialize(withScore: score)
+        self.addChild(endGamePannel)
+        scoreLabel?.removeFromParent()
+    }
+    
+    func presentMainMenu() {
+        if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
+            mainMenuScene.scaleMode = .aspectFill
+            self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
+        }
+    }
+}
+
+
+
+
+// MARK: extension for delegate notifications (app state)
+extension GameplayScene {
+    func initializeDelegateNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(GameplayScene.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(GameplayScene.appWillResignActive), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+    }
+    
+    @objc
+    func appDidBecomeActive() {
+        startOctogons()
+    }
+    
+    @objc
+    func appWillResignActive() {
+        stopOctogons()
+    }
+    
+    func stopOctogons() {
+        for octogon in octogons {
+            octogon.stopAnimation()
+        }
+    }
+    
+    func startOctogons() {
+        for octogon in octogons {
+            octogon.startAnimation()
+        }
+    }
+}
 
 
 

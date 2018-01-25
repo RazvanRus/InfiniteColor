@@ -12,7 +12,7 @@ class CircleService {
     private init() {}
     static let shared = CircleService()
     
-    let animationDuration = 0.9
+    let animationDuration = 0.25
     
     var currentPartColor = OctogonService.shared.getRandomPart()
     var nextPartColor = OctogonService.shared.getRandomPart()

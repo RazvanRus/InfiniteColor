@@ -21,8 +21,8 @@ class OctogonService {
     static let shared = OctogonService()
     
     let animationDuration: TimeInterval = 1
-    let scaleValue: CGFloat = 1.2
-    let spinningAngle: CGFloat = 2.5
+    var scaleValue: CGFloat = 1.25
+    let spinningAngle: CGFloat = 3.0
         
     var parts = ["blue","darkGreen","green","lightBlue","lightGreen","pink","red","yellow"]
     let rotationAngles: [CGFloat] = [3.14159,1.5708,0,4.71239,2.35619,0.785398,5.49779,3.92699]
