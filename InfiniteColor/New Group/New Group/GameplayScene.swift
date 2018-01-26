@@ -11,6 +11,7 @@ import SpriteKit
 class GameplayScene: SKScene {
     // MARK: variables
     var spinningFactor: CGFloat = 1
+    var scoreMultiplier = 2
     
     var lastOctogon: Octogon?
     var actualOctogon: Octogon?
@@ -106,9 +107,8 @@ class GameplayScene: SKScene {
         
             if canMoveToNextOctogon() {
                 if lastOctogon!.radiansRotation < CGFloat(7) {
-                    incrementScore()
-                }
-                incrementScore()
+                    perfectMove()
+                }else { incrementScore(by: 1); scoreMultiplier = 2}
                 createOctogon()
                 actualOctogon?.colorize()
                 slowOctogons()
@@ -125,10 +125,15 @@ class GameplayScene: SKScene {
             }
     }
     
-    func incrementScore() {
+    func perfectMove() {
+        incrementScore(by: scoreMultiplier)
+        scoreMultiplier += 1
+    }
+    
+    func incrementScore(by amount: Int) {
         if let scoreText = scoreLabel?.text,
             let score = Int(scoreText) {
-            scoreLabel?.text = "\(score+1)"
+            scoreLabel?.text = "\(score+amount)"
         }
     }
 }

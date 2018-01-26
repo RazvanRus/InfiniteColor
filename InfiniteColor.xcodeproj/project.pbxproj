@@ -21,6 +21,7 @@
 		2902EC642010D4AF000F5182 /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2902EC632010D4AF000F5182 /* Circle.swift */; };
 		293F529C201A066000CD4FE1 /* EndGamePannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293F529B201A066000CD4FE1 /* EndGamePannel.swift */; };
 		293F529E201A2B4700CD4FE1 /* ZPositionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293F529D201A2B4700CD4FE1 /* ZPositionService.swift */; };
+		29596A3E201BAD8300F2839B /* Part.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29596A3D201BAD8300F2839B /* Part.swift */; };
 		2986A9672016326200B69778 /* OctogonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2986A9662016326200B69778 /* OctogonService.swift */; };
 		2986A96B2016392200B69778 /* CircleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2986A96A2016392200B69778 /* CircleService.swift */; };
 /* End PBXBuildFile section */
@@ -42,6 +43,7 @@
 		2902EC632010D4AF000F5182 /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 		293F529B201A066000CD4FE1 /* EndGamePannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGamePannel.swift; sourceTree = "<group>"; };
 		293F529D201A2B4700CD4FE1 /* ZPositionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPositionService.swift; sourceTree = "<group>"; };
+		29596A3D201BAD8300F2839B /* Part.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Part.swift; sourceTree = "<group>"; };
 		2986A9662016326200B69778 /* OctogonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctogonService.swift; sourceTree = "<group>"; };
 		2986A96A2016392200B69778 /* CircleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,6 +125,7 @@
 			children = (
 				2902EC612010B94F000F5182 /* Octogon.swift */,
 				2902EC632010D4AF000F5182 /* Circle.swift */,
+				29596A3D201BAD8300F2839B /* Part.swift */,
 			);
 			name = Model;
 			path = "New Group";
@@ -229,6 +232,7 @@
 				2902EC602010AF96000F5182 /* GameplayScene.swift in Sources */,
 				293F529E201A2B4700CD4FE1 /* ZPositionService.swift in Sources */,
 				293F529C201A066000CD4FE1 /* EndGamePannel.swift in Sources */,
+				29596A3E201BAD8300F2839B /* Part.swift in Sources */,
 				2902EC402010AD56000F5182 /* GameViewController.swift in Sources */,
 				2902EC5E2010AF82000F5182 /* MainMenuScene.swift in Sources */,
 				2902EC382010AD56000F5182 /* AppDelegate.swift in Sources */,

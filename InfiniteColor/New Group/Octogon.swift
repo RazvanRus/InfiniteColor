@@ -13,7 +13,7 @@ class Octogon: SKSpriteNode {
     var animationTimer = Timer()
     var initialSize: CGFloat = 150
     var radiansRotation: CGFloat = 0.0
-    
+    var parts: [Part] = []
     
     func initialize(spinningFactor: CGFloat) {
         OctogonService.shared.shuffleParts()
@@ -30,53 +30,18 @@ class Octogon: SKSpriteNode {
     
     func createParts() {
         for i in 0..<4 {
-            createFirstPart(for: i)
-            createSecoundPart(for: i)
+            let part1 = Part()
+            part1.initialize(withInitialSize: initialSize)
+            part1.createFirstPart(for: i)
+            self.addChild(part1)
+            parts.append(part1)
+            
+            let part2 = Part()
+            part2.initialize(withInitialSize: initialSize)
+            part2.createSecoundPart(for: i)
+            self.addChild(part2)
+            parts.append(part2)
         }
-    }
-    
-    func createFirstPart(for index: Int) {
-        let part = SKSpriteNode(imageNamed: OctogonService.shared.parts[index])
-        part.name = OctogonService.shared.parts[index]
-        part.size = CGSize(width: (initialSize/7)*3, height: initialSize/7)
-        var positionX: CGFloat = 0
-        var positionY: CGFloat = 0
-        if index%2 == 0 {
-            positionX = 0
-            positionY = (initialSize/2 + 1) * CGFloat(1-index)
-        } else {
-            positionY = 0
-            positionX = (initialSize/2 + 1) * CGFloat(2-index)
-        }
-        part.position = CGPoint(x: positionX, y: positionY)
-        part.zRotation = OctogonService.shared.rotationAngles[index]
-        part.zPosition = ZPositionService.shared.part
-        
-        self.addChild(part)
-    }
-    
-    func createSecoundPart(for index: Int) {
-        let part = SKSpriteNode(imageNamed: OctogonService.shared.parts[index+4])
-        part.name = OctogonService.shared.parts[index+4]
-        part.size = CGSize(width: (initialSize/7)*3, height: initialSize/7)
-        var positionX: CGFloat = 0
-        var positionY: CGFloat = 0
-        if index<2 {
-            positionX = initialSize/2 - initialSize/7
-        } else {
-            positionX = -(initialSize/2 - initialSize/7)
-        }
-        if index == 0 || index == 3 {
-            positionY = initialSize/2 - initialSize/7
-        } else {
-            positionY = -(initialSize/2 - initialSize/7)
-        }
-        
-        part.position = CGPoint(x: positionX, y: positionY)
-        part.zRotation = OctogonService.shared.rotationAngles[index+4]
-        part.zPosition = ZPositionService.shared.part
-
-        self.addChild(part)
     }
     
     func setPosition(_ position: CGPoint) {
@@ -130,12 +95,7 @@ class Octogon: SKSpriteNode {
     }
     
     func colorize() {
-        for index in 0..<8 {
-            let part = self.childNode(withName: OctogonService.shared.parts[index])
-            let color = UIColor(red: 0, green: 0, blue: 0, alpha: 0.65)
-            let colorize = SKAction.colorize(with: color, colorBlendFactor: 0.95, duration: 0.5)
-            part?.run(colorize)
-        }
+        for part in parts { part.colorize() }
     }
 }
 
