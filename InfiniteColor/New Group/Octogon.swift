@@ -12,6 +12,7 @@ class Octogon: SKSpriteNode {
     var spinningFactor: CGFloat = 1
     var animationTimer = Timer()
     var initialSize: CGFloat = 150
+    var radiansRotation: CGFloat = 0.0
     
     
     func initialize(spinningFactor: CGFloat) {
@@ -24,7 +25,7 @@ class Octogon: SKSpriteNode {
     func createOctogon() {
         self.name = "Octogon"
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        self.zPosition = 5
+        self.zPosition = ZPositionService.shared.octogon
     }
     
     func createParts() {
@@ -42,13 +43,14 @@ class Octogon: SKSpriteNode {
         var positionY: CGFloat = 0
         if index%2 == 0 {
             positionX = 0
-            positionY = initialSize/2 * CGFloat(1-index)
+            positionY = (initialSize/2 + 1) * CGFloat(1-index)
         } else {
             positionY = 0
-            positionX = initialSize/2 * CGFloat(2-index)
+            positionX = (initialSize/2 + 1) * CGFloat(2-index)
         }
         part.position = CGPoint(x: positionX, y: positionY)
         part.zRotation = OctogonService.shared.rotationAngles[index]
+        part.zPosition = ZPositionService.shared.part
         
         self.addChild(part)
     }
@@ -72,7 +74,8 @@ class Octogon: SKSpriteNode {
         
         part.position = CGPoint(x: positionX, y: positionY)
         part.zRotation = OctogonService.shared.rotationAngles[index+4]
-        
+        part.zPosition = ZPositionService.shared.part
+
         self.addChild(part)
     }
     
@@ -88,6 +91,7 @@ class Octogon: SKSpriteNode {
     func removeOctogon() {
         self.animationTimer.invalidate()
         self.removeAllActions()
+        self.removeAllChildren()
         self.removeFromParent()
     }
     
@@ -100,9 +104,10 @@ class Octogon: SKSpriteNode {
     @objc
     func startAnimation() {
         let rotate = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*spinningFactor, duration: OctogonService.shared.animationDuration)
-        let scale = SKAction.scale(by: OctogonService.shared.scaleValue, duration: OctogonService.shared.animationDuration)
+        let scale = SKAction.scale(by: OctogonService.shared.getScale(), duration: OctogonService.shared.animationDuration)
         let group = SKAction.group([rotate,scale])
         self.run(group)
+        radiansRotation += OctogonService.shared.spinningAngle
         
         animationTimer.invalidate()
         animationTimer = Timer.scheduledTimer(timeInterval: OctogonService.shared.animationDuration, target: self, selector: #selector(startAnimation), userInfo: nil, repeats: false)
@@ -116,7 +121,7 @@ class Octogon: SKSpriteNode {
         let rotate4 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.01*spinningFactor, duration: OctogonService.shared.animationDuration/10)
         let rotate5 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.015*spinningFactor, duration: OctogonService.shared.animationDuration/10)
         let sequence = SKAction.sequence([rotate1,rotate2,rotate3,rotate4,rotate5])
-        let scale = SKAction.scale(by: OctogonService.shared.scaleValue*0.91, duration: OctogonService.shared.animationDuration/2)
+        let scale = SKAction.scale(by: OctogonService.shared.getScale()*0.91, duration: OctogonService.shared.animationDuration/2)
         let group = SKAction.group([sequence,scale])
         self.run(group)
         
@@ -129,7 +134,6 @@ class Octogon: SKSpriteNode {
             let part = self.childNode(withName: OctogonService.shared.parts[index])
             let color = UIColor(red: 0, green: 0, blue: 0, alpha: 0.65)
             let colorize = SKAction.colorize(with: color, colorBlendFactor: 0.95, duration: 0.5)
-//            part?.alpha = 0.7
             part?.run(colorize)
         }
     }

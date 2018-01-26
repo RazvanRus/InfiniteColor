@@ -19,7 +19,7 @@ class Circle: SKSpriteNode {
         self.texture = SKTexture(imageNamed: "\(CircleService.shared.nextPartColor)Circle")
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.alpha = 1
-        self.zPosition = 6
+        self.zPosition = ZPositionService.shared.circle
     }
     
     func setPosition(_ position: CGPoint) {

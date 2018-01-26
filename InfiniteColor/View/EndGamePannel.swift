@@ -21,7 +21,7 @@ class EndGamePannel: SKSpriteNode {
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.position = CGPoint(x: 0, y: 0)
         self.size = CGSize(width: 750, height: 1334)
-        self.zPosition = 10
+        self.zPosition = ZPositionService.shared.endGame
         self.color = SKColor.black
         self.alpha = 0.8
     }

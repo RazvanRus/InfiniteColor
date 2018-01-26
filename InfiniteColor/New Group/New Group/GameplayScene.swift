@@ -9,6 +9,7 @@
 import SpriteKit
 
 class GameplayScene: SKScene {
+    // MARK: variables
     var spinningFactor: CGFloat = 1
     
     var lastOctogon: Octogon?
@@ -16,31 +17,32 @@ class GameplayScene: SKScene {
     var octogons: [Octogon] = []
     var circle = Circle()
     
-    var isScaling = true
     var canTouch = true
     var canMoveToMainMenu = false
     
-    var score = 0
     var scoreLabel: SKLabelNode?
     
+    
+    // MARK: functions
     override func didMove(to view: SKView) {
         initialize()
         initializeDelegateNotifications()
     }
     
     func initialize() {
-        OctogonService.shared.scaleValue = 1.25
+        OctogonService.shared.isScaling = true
         scoreLabel = self.childNode(withName: "ScoreLabel") as? SKLabelNode
+        scoreLabel?.zPosition = ZPositionService.shared.score
         Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(createFirstOctogons), userInfo: nil, repeats: false)
     }
     
     override func update(_ currentTime: TimeInterval) {
         if let actualOct = actualOctogon {
-            if isScaling && actualOct.size.width > CGFloat(500) {
-                OctogonService.shared.scaleValue = 1
-                isScaling = false
+            if OctogonService.shared.isScaling && actualOct.size.width > CGFloat(500) {
+                OctogonService.shared.isScaling = false
             }
         }
+        adjustScoreSize()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -49,10 +51,7 @@ class GameplayScene: SKScene {
         }else {
             if canTouch {
                 moveCircle()
-                if !isScaling {
-                    isScaling = true
-                    OctogonService.shared.scaleValue = 1.25
-                }
+                if !OctogonService.shared.isScaling { OctogonService.shared.isScaling = true }
             }
         }
     }
@@ -74,6 +73,12 @@ class GameplayScene: SKScene {
                 index -= 1
             }
             index += 1
+        }
+    }
+    
+    func adjustScoreSize() {
+        if let lastOct = lastOctogon {
+            if lastOct.size.height < 150 { scoreLabel?.fontSize = lastOct.size.height/1.875 } else { scoreLabel?.fontSize = 80 }
         }
     }
     
@@ -100,6 +105,9 @@ class GameplayScene: SKScene {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2*CircleService.shared.animationDuration) { self.canTouch = true }
         
             if canMoveToNextOctogon() {
+                if lastOctogon!.radiansRotation < CGFloat(7) {
+                    incrementScore()
+                }
                 incrementScore()
                 createOctogon()
                 actualOctogon?.colorize()
@@ -196,6 +204,7 @@ extension GameplayScene {
 // MARK: endGameSituation
 extension GameplayScene {
     func endGameSituation() {
+        stopOctogons()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) { self.canMoveToMainMenu = true }
         if let scoreText = scoreLabel?.text, let score = Int(scoreText) {
             createEndGamePannel(withScore: score)
@@ -229,7 +238,9 @@ extension GameplayScene {
     
     @objc
     func appDidBecomeActive() {
-        startOctogons()
+        if !canMoveToMainMenu {
+            startOctogons()
+        }
     }
     
     @objc
