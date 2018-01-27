@@ -10,6 +10,7 @@ import SpriteKit
 
 class Part: SKSpriteNode {
     var initialSize: CGFloat = 150
+    
     func initialize(withInitialSize size: CGFloat) {
         initialSize = size
     }
@@ -58,5 +59,12 @@ class Part: SKSpriteNode {
         let color = UIColor(red: 0, green: 0, blue: 0, alpha: 0.65)
         let colorize = SKAction.colorize(with: color, colorBlendFactor: 0.95, duration: 0.5)
         self.run(colorize)
+    }
+    
+    func perfectMoveAnimation() {
+        let scaleUp = SKAction.scale(by: 1.2, duration: CircleService.shared.animationDuration/2)
+        let scaleDown = SKAction.scale(by: 0.833333333, duration: CircleService.shared.animationDuration/2)
+        let sequence = SKAction.sequence([scaleUp,scaleDown])
+        self.run(sequence)
     }
 }

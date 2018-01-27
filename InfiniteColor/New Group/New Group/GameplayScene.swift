@@ -78,12 +78,39 @@ class GameplayScene: SKScene {
     }
     
     func adjustScoreSize() {
-        if let lastOct = lastOctogon {
-            if lastOct.size.height < 150 { scoreLabel?.fontSize = lastOct.size.height/1.875 } else { scoreLabel?.fontSize = 80 }
-        }
+        scoreLabel?.fontSize = getScoreSize()
     }
     
-    func distanceBetween(circle: Circle, and part: SKSpriteNode) -> CGFloat {
+    func getScoreSize() -> CGFloat {
+        if let scoreText = scoreLabel?.text, let lastOct = lastOctogon {
+            if lastOct.size.height < 150 {
+                switch scoreText.count {
+                case 1:
+                    return lastOct.size.height/1.875
+                case 2:
+                    return lastOct.size.height/2.5
+                case 3:
+                    return lastOct.size.height/3.5
+                default:
+                    return lastOct.size.height/4.5
+                }
+            }else {
+                switch scoreText.count {
+                case 1:
+                    return 80
+                case 2:
+                    return 60
+                case 3:
+                    return 42.85
+                default:
+                    return 30
+                }
+            }
+        }
+        return 80
+    }
+    
+    func distanceBetween(circle: Circle, and part: Part) -> CGFloat {
         guard let circlePositionRelative = circle.scene?.convert(circle.position, from: circle.parent!) else {return 1000}
         guard let partPositionRelative = part.scene?.convert(part.position, from: part.parent!) else {return 1000}
         
@@ -95,7 +122,8 @@ class GameplayScene: SKScene {
     }
     
     func canMoveToNextOctogon() -> Bool {
-        if let octogon =  lastOctogon, let part = octogon.childNode(withName: CircleService.shared.nextPartColor) as? SKSpriteNode {
+        if let octogon =  lastOctogon{
+            let part = octogon.getNextPart()
             return octogon.size.height/distanceBetween(circle: circle, and: part) > 2.75
         }
         return false
@@ -108,24 +136,41 @@ class GameplayScene: SKScene {
             if canMoveToNextOctogon() {
                 if lastOctogon!.radiansRotation < CGFloat(7) {
                     perfectMove()
-                }else { incrementScore(by: 1); scoreMultiplier = 2}
-                createOctogon()
-                actualOctogon?.colorize()
-                slowOctogons()
-                verifyOctogons()
-                
-                circle.scaleDownAnimation()
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + CircleService.shared.animationDuration, execute: {
-                    self.createCircle(for: self.actualOctogon!)
-                    self.circle.scaleUpAnimation()
-                })
+                }else {
+                    incrementScore(by: 1)
+                    scoreMultiplier = 2
+                }
+                moveAnimation()
             } else {
                 // end game situation
                 endGameSituation()
             }
     }
     
+    func moveAnimation() {
+        createOctogon()
+        actualOctogon?.colorize()
+        slowOctogons()
+        verifyOctogons()
+        
+        circle.scaleDownAnimation()
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + CircleService.shared.animationDuration, execute: {
+            self.createCircle(for: self.actualOctogon!)
+            self.circle.scaleUpAnimation()
+        })
+    }
+    
     func perfectMove() {
+        let perfectMoveLabel = PerfectMoveLabel()
+        perfectMoveLabel.initialize(withText: "x\(scoreMultiplier)")
+        if let lastOct = lastOctogon {
+            let part = lastOct.getNextPart()
+            perfectMoveLabel.setSize(part.size.height*0.8)
+            part.addChild(perfectMoveLabel)
+            part.perfectMoveAnimation()
+        }
+        perfectMoveLabel.remove(after: CircleService.shared.animationDuration)
+        
         incrementScore(by: scoreMultiplier)
         scoreMultiplier += 1
     }
@@ -199,7 +244,8 @@ extension GameplayScene {
         let size = octogon.initialSize
         circle.setSize(CGSize(width: size/9, height: size/9))
         
-        if let part = octogon.childNode(withName: CircleService.shared.currentPartColor) { part.addChild(circle) }
+        let part = octogon.getCurrentPart()
+        part.addChild(circle)
     }
 }
 

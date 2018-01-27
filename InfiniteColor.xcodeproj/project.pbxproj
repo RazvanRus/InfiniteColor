@@ -22,6 +22,7 @@
 		293F529C201A066000CD4FE1 /* EndGamePannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293F529B201A066000CD4FE1 /* EndGamePannel.swift */; };
 		293F529E201A2B4700CD4FE1 /* ZPositionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293F529D201A2B4700CD4FE1 /* ZPositionService.swift */; };
 		29596A3E201BAD8300F2839B /* Part.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29596A3D201BAD8300F2839B /* Part.swift */; };
+		29596A40201CB1F000F2839B /* PerfectMoveLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29596A3F201CB1F000F2839B /* PerfectMoveLabel.swift */; };
 		2986A9672016326200B69778 /* OctogonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2986A9662016326200B69778 /* OctogonService.swift */; };
 		2986A96B2016392200B69778 /* CircleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2986A96A2016392200B69778 /* CircleService.swift */; };
 /* End PBXBuildFile section */
@@ -44,6 +45,7 @@
 		293F529B201A066000CD4FE1 /* EndGamePannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGamePannel.swift; sourceTree = "<group>"; };
 		293F529D201A2B4700CD4FE1 /* ZPositionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPositionService.swift; sourceTree = "<group>"; };
 		29596A3D201BAD8300F2839B /* Part.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Part.swift; sourceTree = "<group>"; };
+		29596A3F201CB1F000F2839B /* PerfectMoveLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfectMoveLabel.swift; sourceTree = "<group>"; };
 		2986A9662016326200B69778 /* OctogonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctogonService.swift; sourceTree = "<group>"; };
 		2986A96A2016392200B69778 /* CircleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -100,9 +102,9 @@
 		2902EC502010AD65000F5182 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				2902EC542010AD88000F5182 /* SceneController */,
 				2902EC372010AD56000F5182 /* AppDelegate.swift */,
 				2902EC3F2010AD56000F5182 /* GameViewController.swift */,
-				2902EC542010AD88000F5182 /* SceneController */,
 			);
 			name = Controller;
 			path = "New Group";
@@ -116,6 +118,7 @@
 				2902EC412010AD56000F5182 /* Main.storyboard */,
 				2902EC532010AD7B000F5182 /* SceneView */,
 				293F529B201A066000CD4FE1 /* EndGamePannel.swift */,
+				29596A3F201CB1F000F2839B /* PerfectMoveLabel.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 				2902EC402010AD56000F5182 /* GameViewController.swift in Sources */,
 				2902EC5E2010AF82000F5182 /* MainMenuScene.swift in Sources */,
 				2902EC382010AD56000F5182 /* AppDelegate.swift in Sources */,
+				29596A40201CB1F000F2839B /* PerfectMoveLabel.swift in Sources */,
 				2902EC622010B94F000F5182 /* Octogon.swift in Sources */,
 				2902EC642010D4AF000F5182 /* Circle.swift in Sources */,
 			);

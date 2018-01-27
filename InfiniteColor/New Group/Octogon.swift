@@ -97,6 +97,16 @@ class Octogon: SKSpriteNode {
     func colorize() {
         for part in parts { part.colorize() }
     }
+    
+    func getNextPart() -> Part {
+        for part in parts { if part.name == CircleService.shared.nextPartColor {return part} }
+        return parts.first!
+    }
+
+    func getCurrentPart() -> Part {
+        for part in parts { if part.name == CircleService.shared.currentPartColor {return part} }
+        return parts.first!
+    }
 }
 
 
