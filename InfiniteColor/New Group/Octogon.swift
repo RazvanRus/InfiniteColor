@@ -10,10 +10,12 @@ import SpriteKit
 
 class Octogon: SKSpriteNode {
     var spinningFactor: CGFloat = 1
-    var animationTimer = Timer()
     var initialSize: CGFloat = 150
     var radiansRotation: CGFloat = 0.0
     var parts: [Part] = []
+    var animationTimer = Timer()
+    var increaseRadiansRotationTimer = Timer()
+
     
     func initialize(spinningFactor: CGFloat) {
         OctogonService.shared.shuffleParts()
@@ -60,6 +62,17 @@ class Octogon: SKSpriteNode {
         self.removeFromParent()
     }
     
+    @objc
+    func increaseRadiansRotation() {
+        radiansRotation += OctogonService.shared.spinningAngle/10
+        
+        increaseRadiansRotationTimer.invalidate()
+        increaseRadiansRotationTimer = Timer.scheduledTimer(timeInterval: OctogonService.shared.animationDuration/10, target: self, selector: #selector(increaseRadiansRotation), userInfo: nil, repeats: false)
+    }
+    
+    func stopIncreasing() {
+        increaseRadiansRotationTimer.invalidate()
+    }
     
     func stopAnimation() {
         animationTimer.invalidate()
@@ -72,7 +85,6 @@ class Octogon: SKSpriteNode {
         let scale = SKAction.scale(by: OctogonService.shared.getScale(), duration: OctogonService.shared.animationDuration)
         let group = SKAction.group([rotate,scale])
         self.run(group)
-        radiansRotation += OctogonService.shared.spinningAngle
         
         animationTimer.invalidate()
         animationTimer = Timer.scheduledTimer(timeInterval: OctogonService.shared.animationDuration, target: self, selector: #selector(startAnimation), userInfo: nil, repeats: false)
@@ -89,7 +101,7 @@ class Octogon: SKSpriteNode {
         let scale = SKAction.scale(by: OctogonService.shared.getScale()*0.91, duration: OctogonService.shared.animationDuration/2)
         let group = SKAction.group([sequence,scale])
         self.run(group)
-        
+
         animationTimer.invalidate()
         animationTimer = Timer.scheduledTimer(timeInterval: OctogonService.shared.animationDuration/2, target: self, selector: #selector(startAnimation), userInfo: nil, repeats: false)
     }

@@ -26,6 +26,7 @@ class GameplayScene: SKScene {
     
     // MARK: functions
     override func didMove(to view: SKView) {
+        OctogonService.shared.spinningAngle = 2.5
         initialize()
         initializeDelegateNotifications()
     }
@@ -62,6 +63,7 @@ class GameplayScene: SKScene {
             octogon.slowAnimation()
             octogon.spinningFactor *= -1
         }
+        lastOctogon?.stopIncreasing()
         spinningFactor *= -1
     }
     
@@ -134,13 +136,14 @@ class GameplayScene: SKScene {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2*CircleService.shared.animationDuration) { self.canTouch = true }
         
             if canMoveToNextOctogon() {
-                if lastOctogon!.radiansRotation < CGFloat(7) {
+                if lastOctogon!.radiansRotation <= CGFloat(3.8) {
                     perfectMove()
                 }else {
                     incrementScore(by: 1)
                     scoreMultiplier = 2
                 }
                 moveAnimation()
+                OctogonService.shared.increaseSpinningAngle()
             } else {
                 // end game situation
                 endGameSituation()
@@ -158,6 +161,7 @@ class GameplayScene: SKScene {
             self.createCircle(for: self.actualOctogon!)
             self.circle.scaleUpAnimation()
         })
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + CircleService.shared.animationDuration*2) { self.lastOctogon?.increaseRadiansRotation() }
     }
     
     func perfectMove() {
@@ -207,7 +211,7 @@ extension GameplayScene {
         
         spinningFactor *= -1
         secoundOctogon.startAnimation()
-        
+        secoundOctogon.increaseRadiansRotation()
         actualOctogon = octogon
         lastOctogon = secoundOctogon
         actualOctogon?.colorize()
@@ -229,8 +233,10 @@ extension GameplayScene {
         
         spinningFactor *= -1
         octogon.startAnimation()
+        octogon.increaseRadiansRotation()
         octogons.append(octogon)
         
+        lastOctogon?.stopIncreasing()
         actualOctogon = lastOctogon
         lastOctogon = octogon
     }
@@ -256,7 +262,7 @@ extension GameplayScene {
 extension GameplayScene {
     func endGameSituation() {
         stopOctogons()
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) { self.canMoveToMainMenu = true }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { self.canMoveToMainMenu = true }
         if let scoreText = scoreLabel?.text, let score = Int(scoreText) {
             createEndGamePannel(withScore: score)
         } else { createEndGamePannel(withScore: 0) }
@@ -303,12 +309,14 @@ extension GameplayScene {
         for octogon in octogons {
             octogon.stopAnimation()
         }
+        lastOctogon?.stopIncreasing()
     }
     
     func startOctogons() {
         for octogon in octogons {
             octogon.startAnimation()
         }
+        lastOctogon?.increaseRadiansRotation()
     }
 }
 
