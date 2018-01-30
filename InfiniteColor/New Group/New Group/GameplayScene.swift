@@ -42,18 +42,23 @@ class GameplayScene: SKScene {
     func initialize() {
         ReviveGameService.shared.canPlayerBeRevived = true
         CircleService.shared.moveToNextPart()
-        let size = CGSize(width: 230, height: 230)
-        Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(createFirstOctogons), userInfo: size, repeats: false)
+        
+        createFirstOctogons(withSize: CGSize(width: 230, height: 230))
+        stopOctogons()
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) { self.startOctogons() }
     }
     
     func initializeForRevivePlayer() {
         ReviveGameService.shared.canPlayerBeRevived = false
         ReviveGameService.shared.isPlayerRevived = false
         spinningFactor = ReviveGameService.shared.spinningFactor
+        if ReviveGameService.shared.octogonsSize.count % 2 == 1 { spinningFactor *= -1 }
         OctogonService.shared.spinningAngle = ReviveGameService.shared.spinningAngle
         incrementScore(by: ReviveGameService.shared.score)
         
-        Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(createFirstOctogons), userInfo: ReviveGameService.shared.actualOctogonSize, repeats: false)
+        createOctogonsForRevive()
+        stopOctogons()
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) { self.startOctogons() }
     }
     
     func initializeLabels() {
@@ -166,7 +171,7 @@ class GameplayScene: SKScene {
     func moveCircle() {
         canTouch = false
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2*CircleService.shared.animationDuration) { self.canTouch = true }
-        
+                
         if canMoveToNextOctogon() {
             if lastOctogon.radiansRotation <= CGFloat(3.8) {
                 AudioService.shared.playSoundEffect("perfect")
@@ -228,8 +233,7 @@ class GameplayScene: SKScene {
 // MARK: creating stuffs functions
 extension GameplayScene {
     @objc
-    func createFirstOctogons(withSize size: Timer) {
-        let firstSize = size.userInfo as! CGSize
+    func createFirstOctogons(withSize firstSize: CGSize) {
         if firstSize.width >  CGFloat(500) { OctogonService.shared.isScaling = false }
         
         let octogon = createOctogon(withSize: firstSize)
@@ -245,6 +249,22 @@ extension GameplayScene {
         lastOctogon = secoundOctogon
         actualOctogon.instantColorize()
 
+        createCircle(for: actualOctogon)
+    }
+    
+    @objc
+    func createOctogonsForRevive() {
+        for size in ReviveGameService.shared.octogonsSize {
+            actualOctogon = lastOctogon
+            lastOctogon = createOctogon(withSize: size)
+            
+            actualOctogon.stopIncreasing()
+            actualOctogon.instantColorize()
+            lastOctogon.increaseRadiansRotation()
+            
+            octogons.append(lastOctogon)
+            self.addChild(lastOctogon)
+        }
         createCircle(for: actualOctogon)
     }
     
@@ -306,8 +326,10 @@ extension GameplayScene {
         ReviveGameService.shared.score = score
         ReviveGameService.shared.spinningFactor = spinningFactor
         ReviveGameService.shared.spinningAngle = OctogonService.shared.spinningAngle
-        ReviveGameService.shared.actualOctogonSize = actualOctogon.size
-        ReviveGameService.shared.lastOctogonSize = lastOctogon.size
+        
+        for octogon in octogons {
+            ReviveGameService.shared.octogonsSize.append(octogon.size)
+        }
     }
     
     func setHighscore() {

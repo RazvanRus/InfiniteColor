@@ -63,7 +63,7 @@ class Part: SKSpriteNode {
         self.run(colorize)
     }
     
-    func instantColorize() { colorize(inTime: 0.1) }
+    func instantColorize() { colorize(inTime: 0) }
     func slowColorize() { colorize(inTime: CircleService.shared.animationDuration*2) }
     
     func perfectMoveAnimation() {
