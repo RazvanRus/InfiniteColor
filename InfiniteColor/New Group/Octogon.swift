@@ -92,22 +92,26 @@ class Octogon: SKSpriteNode {
     
     func slowAnimation() {
         self.removeAllActions()
-        let rotate1 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.015*spinningFactor, duration: OctogonService.shared.animationDuration/10)
-        let rotate2 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.01*spinningFactor, duration: OctogonService.shared.animationDuration/10)
-        let rotate3 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.0075*spinningFactor, duration: OctogonService.shared.animationDuration/10)
-        let rotate4 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.01*spinningFactor, duration: OctogonService.shared.animationDuration/10)
-        let rotate5 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.015*spinningFactor, duration: OctogonService.shared.animationDuration/10)
+        let rotate1 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.015*spinningFactor, duration: CircleService.shared.animationDuration/2.5)
+        let rotate2 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.01*spinningFactor, duration: CircleService.shared.animationDuration/2.5)
+        let rotate3 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.0075*spinningFactor, duration: CircleService.shared.animationDuration/2.5)
+        let rotate4 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.01*spinningFactor, duration: CircleService.shared.animationDuration/2.5)
+        let rotate5 = SKAction.rotate(byAngle: OctogonService.shared.spinningAngle*0.015*spinningFactor, duration: CircleService.shared.animationDuration/2.5)
         let sequence = SKAction.sequence([rotate1,rotate2,rotate3,rotate4,rotate5])
-        let scale = SKAction.scale(by: OctogonService.shared.getScale()*0.91, duration: OctogonService.shared.animationDuration/2)
+        let scale = SKAction.scale(by: OctogonService.shared.getScale()*0.885, duration: CircleService.shared.animationDuration*2)
         let group = SKAction.group([sequence,scale])
         self.run(group)
 
         animationTimer.invalidate()
-        animationTimer = Timer.scheduledTimer(timeInterval: OctogonService.shared.animationDuration/2, target: self, selector: #selector(startAnimation), userInfo: nil, repeats: false)
+        animationTimer = Timer.scheduledTimer(timeInterval: CircleService.shared.animationDuration*2, target: self, selector: #selector(startAnimation), userInfo: nil, repeats: false)
     }
     
     func colorize() {
-        for part in parts { part.colorize() }
+        for part in parts { part.slowColorize() }
+    }
+    
+    func instantColorize() {
+        for part in parts { part.instantColorize() }
     }
     
     func getNextPart() -> Part {

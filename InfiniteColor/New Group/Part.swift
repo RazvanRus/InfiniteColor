@@ -55,11 +55,16 @@ class Part: SKSpriteNode {
         self.zPosition = ZPositionService.shared.part
     }
     
-    func colorize() {
+    
+    
+    func colorize(inTime time: TimeInterval) {
         let color = UIColor(red: 0, green: 0, blue: 0, alpha: 0.65)
-        let colorize = SKAction.colorize(with: color, colorBlendFactor: 0.95, duration: 0.5)
+        let colorize = SKAction.colorize(with: color, colorBlendFactor: 0.95, duration: time)
         self.run(colorize)
     }
+    
+    func instantColorize() { colorize(inTime: 0.1) }
+    func slowColorize() { colorize(inTime: CircleService.shared.animationDuration*2) }
     
     func perfectMoveAnimation() {
         let scaleUp = SKAction.scale(by: 1.2, duration: CircleService.shared.animationDuration/2)

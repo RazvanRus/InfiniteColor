@@ -11,7 +11,13 @@ import SpriteKit
 class MainMenuScene: SKScene {
 
     override func didMove(to view: SKView) {
-        
+        getHighscore()
+        AudioService.shared.turnDownBackgroundSound()
+    }
+    
+    func getHighscore() {
+        let highscoreLabel = self.childNode(withName: "HighscoreLabel") as? SKLabelNode
+        highscoreLabel?.text = "\(GameService.shared.getHighscore())"
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -25,7 +31,8 @@ class MainMenuScene: SKScene {
     
     func presentGamePlayScene() {
         if let gameplayScene = GameplayScene(fileNamed: "GameplayScene") {
-            gameplayScene.scaleMode = .aspectFill
+            if IphoneTypeService.shared.isIphoneX() { gameplayScene.scaleMode = .aspectFill }
+            else { gameplayScene.scaleMode = .aspectFill }
             self.view?.presentScene(gameplayScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }
     }
