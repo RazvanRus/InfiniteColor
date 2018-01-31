@@ -7,12 +7,10 @@
 //
 
 import SpriteKit
-import AudioToolbox
 
 class PerfectMoveLabel: SKLabelNode {
     func initialize(withText text: String) {
         createLabel(withText: text)
-        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
     }
     
     func setSize(_ size :CGFloat) {

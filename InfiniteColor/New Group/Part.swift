@@ -64,7 +64,7 @@ class Part: SKSpriteNode {
     }
     
     func instantColorize() { colorize(inTime: 0) }
-    func slowColorize() { colorize(inTime: CircleService.shared.animationDuration*2) }
+    func slowColorize() { colorize(inTime: CircleService.shared.animationDuration) }
     
     func perfectMoveAnimation() {
         let scaleUp = SKAction.scale(by: 1.2, duration: CircleService.shared.animationDuration/2)

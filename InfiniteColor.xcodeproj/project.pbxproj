@@ -15,6 +15,8 @@
 		29020783201F8BE7000D58E8 /* main.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2902077F201F8BE7000D58E8 /* main.mp3 */; };
 		29020784201F8BE7000D58E8 /* perfect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 29020780201F8BE7000D58E8 /* perfect.mp3 */; };
 		29020785201F8BE7000D58E8 /* tap.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 29020781201F8BE7000D58E8 /* tap.mp3 */; };
+		29020787202217AA000D58E8 /* SkinsScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 29020786202217AA000D58E8 /* SkinsScene.sks */; };
+		29020789202217D2000D58E8 /* SkinsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29020788202217D2000D58E8 /* SkinsScene.swift */; };
 		2902EC382010AD56000F5182 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2902EC372010AD56000F5182 /* AppDelegate.swift */; };
 		2902EC3C2010AD56000F5182 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2902EC3B2010AD56000F5182 /* Actions.sks */; };
 		2902EC402010AD56000F5182 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2902EC3F2010AD56000F5182 /* GameViewController.swift */; };
@@ -44,6 +46,8 @@
 		2902077F201F8BE7000D58E8 /* main.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = main.mp3; sourceTree = "<group>"; };
 		29020780201F8BE7000D58E8 /* perfect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = perfect.mp3; sourceTree = "<group>"; };
 		29020781201F8BE7000D58E8 /* tap.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = tap.mp3; sourceTree = "<group>"; };
+		29020786202217AA000D58E8 /* SkinsScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = SkinsScene.sks; sourceTree = "<group>"; };
+		29020788202217D2000D58E8 /* SkinsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinsScene.swift; sourceTree = "<group>"; };
 		2902EC342010AD56000F5182 /* InfiniteColor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InfiniteColor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2902EC372010AD56000F5182 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2902EC3B2010AD56000F5182 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
@@ -170,8 +174,9 @@
 			isa = PBXGroup;
 			children = (
 				2902EC3B2010AD56000F5182 /* Actions.sks */,
-				2902EC552010AF14000F5182 /* GameplayScene.sks */,
 				2902EC572010AF2A000F5182 /* MainMenuScene.sks */,
+				2902EC552010AF14000F5182 /* GameplayScene.sks */,
+				29020786202217AA000D58E8 /* SkinsScene.sks */,
 			);
 			name = SceneView;
 			path = "../New Group/SceneView";
@@ -182,6 +187,7 @@
 			children = (
 				2902EC5D2010AF82000F5182 /* MainMenuScene.swift */,
 				2902EC5F2010AF96000F5182 /* GameplayScene.swift */,
+				29020788202217D2000D58E8 /* SkinsScene.swift */,
 			);
 			name = SceneController;
 			path = "New Group";
@@ -253,6 +259,7 @@
 			files = (
 				2902EC432010AD56000F5182 /* Main.storyboard in Resources */,
 				2902EC582010AF2A000F5182 /* MainMenuScene.sks in Resources */,
+				29020787202217AA000D58E8 /* SkinsScene.sks in Resources */,
 				2902EC452010AD56000F5182 /* Assets.xcassets in Resources */,
 				2902EC482010AD56000F5182 /* LaunchScreen.storyboard in Resources */,
 				29020783201F8BE7000D58E8 /* main.mp3 in Resources */,
@@ -281,6 +288,7 @@
 				29596A3E201BAD8300F2839B /* Part.swift in Sources */,
 				29020776201F331E000D58E8 /* IphoneTypeService.swift in Sources */,
 				2902EC402010AD56000F5182 /* GameViewController.swift in Sources */,
+				29020789202217D2000D58E8 /* SkinsScene.swift in Sources */,
 				2902077A201F70CB000D58E8 /* ReviveGameService.swift in Sources */,
 				2902EC5E2010AF82000F5182 /* MainMenuScene.swift in Sources */,
 				2902EC382010AD56000F5182 /* AppDelegate.swift in Sources */,

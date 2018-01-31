@@ -26,7 +26,7 @@ class AudioService {
         }catch{print(error)}
 
         backgroundPlayer.numberOfLoops = -1
-        backgroundPlayer.volume = 0.5
+        backgroundPlayer.volume = 0.8
         backgroundPlayer.play()
     }
     
@@ -45,8 +45,8 @@ class AudioService {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + CircleService.shared.animationDuration*2) { self.soundEffectsPlayer.stop(); self.turnUpBackgroundSound() }
     }
     
-    func turnDownBackgroundSound() { backgroundPlayer.volume = 0.2 }
-    func turnUpBackgroundSound() { backgroundPlayer.volume = 0.5 }
+    func turnDownBackgroundSound() { backgroundPlayer.volume = 0.3 }
+    func turnUpBackgroundSound() { backgroundPlayer.volume = 0.8 }
     func pauseBackgrounSound() {backgroundPlayer.pause()}
     func resumeBackgroundSound() {backgroundPlayer.play()}
 }

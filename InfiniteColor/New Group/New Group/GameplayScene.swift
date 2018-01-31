@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import AudioToolbox
 
 class GameplayScene: SKScene {
     // MARK: variables
@@ -22,7 +23,7 @@ class GameplayScene: SKScene {
     var canMoveToMainMenu = false
     
     var scoreLabel: SKLabelNode?
-    
+    var startTimer = Timer()
     
     // MARK: functions
     override func didMove(to view: SKView) {
@@ -45,7 +46,7 @@ class GameplayScene: SKScene {
         
         createFirstOctogons(withSize: CGSize(width: 230, height: 230))
         stopOctogons()
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) { self.startOctogons() }
+        startTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in self.startOctogons() })
     }
     
     func initializeForRevivePlayer() {
@@ -58,7 +59,7 @@ class GameplayScene: SKScene {
         
         createOctogonsForRevive()
         stopOctogons()
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) { self.startOctogons() }
+        startTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in self.startOctogons() })
     }
     
     func initializeLabels() {
@@ -67,15 +68,24 @@ class GameplayScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        if OctogonService.shared.isScaling && actualOctogon.size.width > CGFloat(500) {
+        if OctogonService.shared.isScaling && actualOctogon.size.width > CGFloat(450) {
             OctogonService.shared.isScaling = false
         }
         adjustScoreSize()
+        adjustScaleValue()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if canMoveToMainMenu {
-            presentMainMenu()
+            for touch in touches {
+                let location = touch.location(in: self)
+                if atPoint(location).name == "EndGameReviveLabel" {
+                    if let scoreText = scoreLabel?.text, let score = Int(scoreText) {
+                        prepareForRevive(withScore: score)
+                        presentGameplayScene()
+                    }
+                }else { presentMainMenu() }
+            }
         }else {
             if canTouch {
                 moveCircle()
@@ -105,6 +115,8 @@ class GameplayScene: SKScene {
         }
     }
 
+    func adjustScaleValue() { OctogonService.shared.scaleValue = 1 + (65/actualOctogon.size.height) }
+    
     func adjustScoreSize() {
         scoreLabel?.fontSize = getScoreSize()
     }
@@ -195,6 +207,7 @@ class GameplayScene: SKScene {
         createNextOctogon()
         actualOctogon.colorize()
         slowOctogons()
+        lastOctogon.fadeInAnimation()
         verifyOctogons()
         
         circle.scaleDownAnimation()
@@ -213,11 +226,17 @@ class GameplayScene: SKScene {
         perfectMoveLabel.setSize(part.size.height*0.8)
         part.addChild(perfectMoveLabel)
         part.perfectMoveAnimation()
-        
         perfectMoveLabel.remove(after: CircleService.shared.animationDuration)
         
+        if GameService.shared.getVibrationStatus() { AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate)) }
+        
         incrementScore(by: scoreMultiplier)
+        incrementBonusPoints(by: 1)
         scoreMultiplier += 1
+    }
+    
+    func incrementBonusPoints(by amount: Int) {
+        GameService.shared.set(bonusPoints: GameService.shared.getBonusPoints()+1)
     }
     
     func incrementScore(by amount: Int) {
@@ -286,6 +305,7 @@ extension GameplayScene {
         self.addChild(octogon)
         octogons.append(octogon)
 
+        
         lastOctogon.stopIncreasing()
         actualOctogon = lastOctogon
         lastOctogon = octogon
@@ -310,13 +330,12 @@ extension GameplayScene {
 // MARK: endGameSituation
 extension GameplayScene {
     func endGameSituation() {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { self.canMoveToMainMenu = true }
+        canMoveToMainMenu = true
         stopOctogons()
         setHighscore()
         ReviveGameService.shared.reset()
         
         if let scoreText = scoreLabel?.text, let score = Int(scoreText) {
-            if ReviveGameService.shared.canPlayerBeRevived { prepareForRevive(withScore: score) }
             createEndGamePannel(withScore: score)
         } else { createEndGamePannel(withScore: 0) }
     }
@@ -351,6 +370,14 @@ extension GameplayScene {
             self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }
     }
+    
+    func presentGameplayScene() {
+        if let gameplayScene = GameplayScene(fileNamed: "GameplayScene") {
+            if IphoneTypeService.shared.isIphoneX() { gameplayScene.scaleMode = .aspectFill }
+            else { gameplayScene.scaleMode = .aspectFill }
+            self.view?.presentScene(gameplayScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
+        }
+    }
 }
 
 
@@ -382,6 +409,7 @@ extension GameplayScene {
             octogon.stopAnimation()
         }
         lastOctogon.stopIncreasing()
+        startTimer.invalidate()
     }
     
     func startOctogons() {

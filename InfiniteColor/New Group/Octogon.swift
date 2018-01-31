@@ -114,6 +114,12 @@ class Octogon: SKSpriteNode {
         for part in parts { part.instantColorize() }
     }
     
+    func fadeInAnimation() {
+        self.alpha = 0.01
+        let fadeIn = SKAction.fadeAlpha(to: 1, duration: CircleService.shared.animationDuration*2)
+        self.run(fadeIn)
+    }
+    
     func getNextPart() -> Part {
         for part in parts { if part.name == CircleService.shared.nextPartColor {return part} }
         return parts.first!
