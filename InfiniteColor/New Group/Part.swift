@@ -16,8 +16,8 @@ class Part: SKSpriteNode {
     }
     
     func createFirstPart(for index: Int) {
-        self.texture = SKTexture(imageNamed: OctogonService.shared.parts[index])
-        self.name = OctogonService.shared.parts[index]
+        self.texture = SKTexture(imageNamed: OctogonService.shared.currentParts[index])
+        self.name = OctogonService.shared.currentParts[index]
         self.size = CGSize(width: (initialSize/7)*3, height: initialSize/7)
         var positionX: CGFloat = 0
         var positionY: CGFloat = 0
@@ -34,8 +34,8 @@ class Part: SKSpriteNode {
     }
     
     func createSecoundPart(for index: Int) {
-        self.texture = SKTexture(imageNamed: OctogonService.shared.parts[index+4])
-        self.name = OctogonService.shared.parts[index+4]
+        self.texture = SKTexture(imageNamed: OctogonService.shared.currentParts[index+4])
+        self.name = OctogonService.shared.currentParts[index+4]
         self.size = CGSize(width: (initialSize/7)*3, height: initialSize/7)
         var positionX: CGFloat = 0
         var positionY: CGFloat = 0

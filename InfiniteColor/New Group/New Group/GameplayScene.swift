@@ -28,6 +28,7 @@ class GameplayScene: SKScene {
     // MARK: functions
     override func didMove(to view: SKView) {
         resetServices()
+        OctogonService.shared.set(currentParts: OctogonService.shared.currentParts)
 
         initializeDelegateNotifications()
         initializeLabels()

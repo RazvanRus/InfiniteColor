@@ -17,17 +17,23 @@ class SkinsScene: SKScene {
     
     func initialize() {
         createOctogon()
-        createRandomColor()
+        createSkinColors()
     }
     
-    func createRandomColor() {
-        let color = SKSpriteNode()
-        color.size = CGSize(width: 95, height: 60)
-        color.position = CGPoint(x: 0, y: 0)
-        color.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        color.color = hexStringToUIColor(hex: OctogonService.shared.getRandomPart())
-        
-        self.addChild(color)
+    func createSkinColors() {
+        for index in 0..<OctogonService.shared.allParts.count {
+            let colorNode = ColorTemplate()
+            colorNode.initialize(withIndexPosition: index)
+            self.addChild(colorNode)
+        }
+    }
+    
+    func deleteSkinColor() {
+        for child in self.children {
+            if let colorTemplate = child as? ColorTemplate {
+                colorTemplate.removeFromParent()
+            }
+        }
     }
     
     func createOctogon() {
@@ -43,6 +49,18 @@ class SkinsScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             if atPoint(location).name == "CancelButton" { presentMainMenu() }
+            if let colorTemplate = atPoint(location) as? ColorTemplate {
+                if !colorTemplate.isAvaible { buy(colorTemplate) }
+            }
+        }
+    }
+    
+    func buy(_ colorTemplate: ColorTemplate) {
+        print("trying to buy")
+        if GameService.shared.getBonusPoints() >= colorTemplate.cost {
+            OctogonService.shared.buy(color: colorTemplate)
+            deleteSkinColor()
+            createSkinColors()
         }
     }
     
@@ -54,29 +72,3 @@ class SkinsScene: SKScene {
     }
 }
 
-
-// MARK: extension for hex string manipulation to ui color
-extension SkinsScene {
-    func hexStringToUIColor (hex:String) -> UIColor {
-        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        
-        if (cString.hasPrefix("#")) {
-            cString.remove(at: cString.startIndex)
-        }
-        
-        if ((cString.count) != 6) {
-            return UIColor.gray
-        }
-        
-        var rgbValue:UInt32 = 0
-        Scanner(string: cString).scanHexInt32(&rgbValue)
-        
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
-    }
-
-}

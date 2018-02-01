@@ -17,6 +17,7 @@
 		29020785201F8BE7000D58E8 /* tap.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 29020781201F8BE7000D58E8 /* tap.mp3 */; };
 		29020787202217AA000D58E8 /* SkinsScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 29020786202217AA000D58E8 /* SkinsScene.sks */; };
 		29020789202217D2000D58E8 /* SkinsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29020788202217D2000D58E8 /* SkinsScene.swift */; };
+		2902078B20237D1E000D58E8 /* ColorTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2902078A20237D1E000D58E8 /* ColorTemplate.swift */; };
 		2902EC382010AD56000F5182 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2902EC372010AD56000F5182 /* AppDelegate.swift */; };
 		2902EC3C2010AD56000F5182 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2902EC3B2010AD56000F5182 /* Actions.sks */; };
 		2902EC402010AD56000F5182 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2902EC3F2010AD56000F5182 /* GameViewController.swift */; };
@@ -48,6 +49,7 @@
 		29020781201F8BE7000D58E8 /* tap.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = tap.mp3; sourceTree = "<group>"; };
 		29020786202217AA000D58E8 /* SkinsScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = SkinsScene.sks; sourceTree = "<group>"; };
 		29020788202217D2000D58E8 /* SkinsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinsScene.swift; sourceTree = "<group>"; };
+		2902078A20237D1E000D58E8 /* ColorTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTemplate.swift; sourceTree = "<group>"; };
 		2902EC342010AD56000F5182 /* InfiniteColor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InfiniteColor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2902EC372010AD56000F5182 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2902EC3B2010AD56000F5182 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				2902EC612010B94F000F5182 /* Octogon.swift */,
 				2902EC632010D4AF000F5182 /* Circle.swift */,
 				29596A3D201BAD8300F2839B /* Part.swift */,
+				2902078A20237D1E000D58E8 /* ColorTemplate.swift */,
 			);
 			name = Model;
 			path = "New Group";
@@ -293,6 +296,7 @@
 				2902EC5E2010AF82000F5182 /* MainMenuScene.swift in Sources */,
 				2902EC382010AD56000F5182 /* AppDelegate.swift in Sources */,
 				29596A40201CB1F000F2839B /* PerfectMoveLabel.swift in Sources */,
+				2902078B20237D1E000D58E8 /* ColorTemplate.swift in Sources */,
 				2902EC622010B94F000F5182 /* Octogon.swift in Sources */,
 				2902EC642010D4AF000F5182 /* Circle.swift in Sources */,
 			);
