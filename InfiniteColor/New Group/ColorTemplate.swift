@@ -10,11 +10,11 @@ import SpriteKit
 
 class ColorTemplate: SKSpriteNode {
     var cost = 50
-    var isAvaible = false
+    var isAvailable = false
     
     
     func initialize(withIndexPosition indexPosition: Int) {
-        isAvaible = OctogonService.shared.allParts[indexPosition].1
+        isAvailable = OctogonService.shared.allParts[indexPosition].1
         createColorTemplate(forIndex: indexPosition)
     }
     
@@ -27,6 +27,7 @@ class ColorTemplate: SKSpriteNode {
         self.zPosition = ZPositionService.shared.part
         setPosition(forIndex: index)
         setColor(forPart: part)
+        setCost(forIndex: index)
     }
     
     func setPosition(forIndex index: Int) {
@@ -36,8 +37,10 @@ class ColorTemplate: SKSpriteNode {
     }
     
     func setColor(forPart part: (String,Bool)) {
-        if isAvaible {self.color = hexStringToUIColor(hex: part.0)} else { notAvailable() }
+        if isAvailable {self.color = hexStringToUIColor(hex: part.0)} else { notAvailable() }
     }
+    
+    func setCost(forIndex index: Int) { cost = 50 * Int(index/10 + 1)}
     
     func notAvailable() {
         self.color = .black

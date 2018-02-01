@@ -56,7 +56,6 @@ class Part: SKSpriteNode {
     }
     
     
-    
     func colorize(inTime time: TimeInterval) {
         let color = UIColor(red: 0, green: 0, blue: 0, alpha: 0.65)
         let colorize = SKAction.colorize(with: color, colorBlendFactor: 0.95, duration: time)
@@ -72,4 +71,7 @@ class Part: SKSpriteNode {
         let sequence = SKAction.sequence([scaleUp,scaleDown])
         self.run(sequence)
     }
+    
+    func isSelected() { self.alpha = 0.4 }
+    func isNotSelected() { self.alpha = 1 }
 }

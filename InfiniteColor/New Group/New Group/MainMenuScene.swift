@@ -13,6 +13,7 @@ import AudioToolbox
 class MainMenuScene: SKScene {
 
     override func didMove(to view: SKView) {
+        OctogonService.shared.getParts()
         getHighscore()
         getBonusPoints()
         if GameService.shared.getVibrationStatus() { self.childNode(withName: "VibrationButton")?.alpha = 1 }
