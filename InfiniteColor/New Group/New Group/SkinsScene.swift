@@ -9,14 +9,15 @@
 
 
 /*
-1. when you change a color update(and save) octogonservice.current parts by removing the ond color and adding the new color
-2. update the octogon presented in the skinsScene (part.sprite = Sprite(imageNamed: newColour.name))
-3. the currentParts colours should be grayed our from the colors list and them can not be used to change another currentParts colour.
-4. messages for when you dont have enought benus points to buy a part.
-5. selected octogon parts should have a border, notAvaileble colors should have a Black sprite (or smth) with number of points needed for the unlocking 
-6. get priceint depending on index ( first 10 will be 50 points, next 10 100, next 10 150, next 10 200, last 5 250)
+ 1. when you change a color update(and save) octogonservice.current parts by removing the old color and adding the new color - DONE
+ 2. update the octogon presented in the skinsScene (part.sprite = Sprite(imageNamed: newColour.name)) and name - Done
+ 3. the currentParts colours should be grayed our from the colors list and them can not be used to change another currentParts colour. partialy Done (need image)
+ 4. messages for when you dont have enought bonus points to buy a part. (need image)
+ 5. selected octogon parts should have a border, notAvaileble colors should have a Black sprite (or smth) with number of points needed for the unlocking (need image)
+ 6. get priceint depending on index ( first 10 will be 50 points, next 10 100, next 10 150, next 10 200, last 5 250) - done
+ 7. message when you try to buy (are you shure you want to spend 50/100/,, coins for this skin? yes/no) (need image)
  
-*/
+ */
 
 import SpriteKit
 
@@ -73,6 +74,8 @@ class SkinsScene: SKScene {
             if let octogonPart = atPoint(location) as? Part { changeSelectedPart(with: octogonPart) }
             if let colorTemplate = atPoint(location) as? ColorTemplate {
                 if colorTemplate.isAvailable { changeColor(with: colorTemplate) }else { buy(colorTemplate) }
+                deleteSkinColor()
+                createSkinColors()
             }
         }
     }
@@ -84,18 +87,26 @@ class SkinsScene: SKScene {
     }
     
     func changeColor(with color: ColorTemplate) {
-        print("changing selected color (\(selectedPart.name)) with new color (\(color.name))")
+        if let colorName = color.name {
+            if OctogonService.shared.currentParts.contains(colorName) {
+                // message that color selected is already used !
+            }else {
+                OctogonService.shared.substitute(currentPart: selectedPart, with: colorName)
+                OctogonService.shared.saveParts()
+                updateOctogon(with: colorName)
+            }
+        }
     }
+    
+    func updateOctogon(with colorName: String) { selectedPart.texture = SKTexture(imageNamed: colorName); selectedPart.name = colorName }
     
     func buy(_ colorTemplate: ColorTemplate) {
         if GameService.shared.getBonusPoints() >= colorTemplate.cost {
             OctogonService.shared.buy(color: colorTemplate)
             GameService.shared.set(bonusPoints: GameService.shared.getBonusPoints() - colorTemplate.cost)
             getBonusPoints()
-            deleteSkinColor()
-            createSkinColors()
         } else {
-            print("not enough bonus points")
+            //print("not enough bonus points")
         }
     }
     

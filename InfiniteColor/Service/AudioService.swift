@@ -26,7 +26,7 @@ class AudioService {
         }catch{print(error)}
 
         backgroundPlayer.numberOfLoops = -1
-        backgroundPlayer.volume = 0.8
+        turnUpBackgroundSound()
         backgroundPlayer.play()
     }
     
@@ -40,7 +40,10 @@ class AudioService {
         }catch{print(error)}
         
         turnDownBackgroundSound()
+        
         soundEffectsPlayer.volume = 1
+        soundEffectsPlayer.enableRate = true
+        if effect == "perfect" { soundEffectsPlayer.rate = 1.33 }
         soundEffectsPlayer.play()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + CircleService.shared.animationDuration*2) { self.soundEffectsPlayer.stop(); self.turnUpBackgroundSound() }
     }

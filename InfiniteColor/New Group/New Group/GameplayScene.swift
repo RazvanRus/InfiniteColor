@@ -115,7 +115,7 @@ class GameplayScene: SKScene {
         }
     }
 
-    func adjustScaleValue() { OctogonService.shared.scaleValue = 1 + (65/actualOctogon.size.height) }
+    func adjustScaleValue() { OctogonService.shared.scaleValue = 1 + (70/actualOctogon.size.height) }
     
     func adjustScoreSize() {
         scoreLabel?.fontSize = getScoreSize()

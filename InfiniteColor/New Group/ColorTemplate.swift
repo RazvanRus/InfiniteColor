@@ -28,6 +28,8 @@ class ColorTemplate: SKSpriteNode {
         setPosition(forIndex: index)
         setColor(forPart: part)
         setCost(forIndex: index)
+        
+        if OctogonService.shared.currentParts.contains(self.name!) { alreadyInUse() }
     }
     
     func setPosition(forIndex index: Int) {
@@ -44,6 +46,18 @@ class ColorTemplate: SKSpriteNode {
     
     func notAvailable() {
         self.color = .black
+    }
+    
+    func alreadyInUse() {
+        let gray = SKSpriteNode()
+        gray.name = "InUse"
+        gray.position = CGPoint(x: 0, y: 0)
+        gray.size = self.size
+        gray.color = .gray
+        gray.alpha = 0.7
+        gray.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        gray.zPosition = self.zPosition+1
+        self.addChild(gray)
     }
     
     func createCostLabel() {

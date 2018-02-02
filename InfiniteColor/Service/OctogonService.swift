@@ -42,11 +42,27 @@ class OctogonService {
         allParts = getAllParts()
     }
     
+    func saveParts() {
+        set(currentParts: currentParts)
+        set(allParts: allParts)
+    }
+    
     func buy(color: ColorTemplate) {
         for index in 0..<allParts.count { if allParts[index].0 == color.name { allParts[index].1 = true } }
         set(allParts: allParts)
     }
     
+    func substitute(currentPart currPart: Part, with partName: String) {
+        var exists = false
+        for index in 0..<currentParts.count { if currentParts[index] == currPart.name { currentParts.remove(at: index);exists=true ; break } }
+        if exists { currentParts.append(partName) } 
+    }
+    
+    
+    
+    
+    
+    /// MARK: saving and retriving from userDefaults
     func set(allParts parts: [(String,Bool)]) {
         var partsName: [String] = []
         var partsAvaileble: [Bool] = []
