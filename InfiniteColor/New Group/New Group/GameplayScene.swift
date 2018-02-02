@@ -12,7 +12,7 @@ import AudioToolbox
 class GameplayScene: SKScene {
     // MARK: variables
     var spinningFactor: CGFloat = 1
-    var scoreMultiplier = 2
+    var scoreMultiplier = 1
     
     var lastOctogon = Octogon()
     var actualOctogon = Octogon()
@@ -183,7 +183,8 @@ class GameplayScene: SKScene {
     func moveCircle() {
         canTouch = false
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2*CircleService.shared.animationDuration) { self.canTouch = true }
-                
+        if scoreMultiplier > GameService.shared.getHighestCombo() { GameService.shared.set(highestCombo: scoreMultiplier) }
+
         if canMoveToNextOctogon() {
             if lastOctogon.radiansRotation <= CGFloat(3.8) {
                 AudioService.shared.playSoundEffect("perfect")
@@ -191,7 +192,7 @@ class GameplayScene: SKScene {
             }else {
                 AudioService.shared.playSoundEffect("tap")
                 incrementScore(by: 1)
-                scoreMultiplier = 2
+                scoreMultiplier = 1
             }
             moveAnimation()
             OctogonService.shared.increaseSpinningAngle()
@@ -220,6 +221,8 @@ class GameplayScene: SKScene {
     }
     
     func perfectMove() {
+        scoreMultiplier += 1
+
         let perfectMoveLabel = PerfectMoveLabel()
         perfectMoveLabel.initialize(withText: "x\(scoreMultiplier)")
         let part = lastOctogon.getNextPart()
@@ -232,7 +235,6 @@ class GameplayScene: SKScene {
         
         incrementScore(by: scoreMultiplier)
         incrementBonusPoints(by: 1)
-        scoreMultiplier += 1
     }
     
     func incrementBonusPoints(by amount: Int) {

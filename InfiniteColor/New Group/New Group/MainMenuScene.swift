@@ -14,11 +14,16 @@ class MainMenuScene: SKScene {
 
     override func didMove(to view: SKView) {
         OctogonService.shared.getParts()
-        getHighscore()
-        getBonusPoints()
+        getLabels()
         if GameService.shared.getVibrationStatus() { self.childNode(withName: "VibrationButton")?.alpha = 1 }
         else { self.childNode(withName: "VibrationButton")?.alpha = 0.4 }
         AudioService.shared.turnDownBackgroundSound()
+    }
+    
+    func getLabels() {
+        getHighestCombo()
+        getHighscore()
+        getBonusPoints()
     }
     
     func getHighscore() {
@@ -30,6 +35,12 @@ class MainMenuScene: SKScene {
     func getBonusPoints() {
         if let bonusPointsLabel = self.childNode(withName: "BonusPointsLabel") as? SKLabelNode {
             bonusPointsLabel.text = "\(GameService.shared.getBonusPoints())"
+        }
+    }
+    
+    func getHighestCombo() {
+        if let highestComboLabel = self.childNode(withName: "HighestComboLabel") as? SKLabelNode {
+            highestComboLabel.text = "x\(GameService.shared.getHighestCombo())"
         }
     }
     
