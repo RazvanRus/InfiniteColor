@@ -23,13 +23,12 @@ class GameplayScene: SKScene {
     var canMoveToMainMenu = false
     
     var scoreLabel: SKLabelNode?
-    var startTimer = Timer()
     
     // MARK: functions
     override func didMove(to view: SKView) {
         resetServices()
 
-        initializeDelegateNotifications()
+  //      initializeDelegateNotifications()
         initializeLabels()
         if ReviveGameService.shared.isPlayerRevived { initializeForRevivePlayer() } else { initialize() }
     }
@@ -44,9 +43,20 @@ class GameplayScene: SKScene {
         ReviveGameService.shared.canPlayerBeRevived = true
         CircleService.shared.moveToNextPart()
         
-        createFirstOctogons(withSize: CGSize(width: 230, height: 230))
-        stopOctogons()
-        startTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in self.startOctogons() })
+        if lastOctogon.name == "PlayButton" && actualOctogon.name == "PlayButton" {
+            initializeOctogons()
+        } else { createFirstOctogons(withSize: CGSize(width: 230, height: 230)) }
+    }
+    
+    func initializeOctogons() {
+        octogons.append(actualOctogon)
+        octogons.append(lastOctogon)
+        actualOctogon.name = "Octogon"
+        lastOctogon.name = "Octogon"
+        actualOctogon.move(toParent: self)
+        lastOctogon.move(toParent: self)
+        createCircle(for: actualOctogon)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { self.startOctogons() }
     }
     
     func initializeForRevivePlayer() {
@@ -58,8 +68,6 @@ class GameplayScene: SKScene {
         incrementScore(by: ReviveGameService.shared.score)
         
         createOctogonsForRevive()
-        stopOctogons()
-        startTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in self.startOctogons() })
     }
     
     func initializeLabels() {
@@ -258,10 +266,12 @@ extension GameplayScene {
         if firstSize.width >  CGFloat(500) { OctogonService.shared.isScaling = false }
         
         let octogon = createOctogon(withSize: firstSize)
+        octogon.startAnimation()
         self.addChild(octogon)
         octogons.append(octogon)
         let secoundSize = CGSize(width: firstSize.width*0.65, height: firstSize.height*0.65)
         let secoundOctogon = createOctogon(withSize: secoundSize)
+        secoundOctogon.startAnimation()
         self.addChild(secoundOctogon)
         octogons.append(secoundOctogon)
         secoundOctogon.increaseRadiansRotation()
@@ -283,6 +293,7 @@ extension GameplayScene {
             actualOctogon.instantColorize()
             lastOctogon.increaseRadiansRotation()
             
+            lastOctogon.startAnimation()
             octogons.append(lastOctogon)
             self.addChild(lastOctogon)
         }
@@ -377,7 +388,7 @@ extension GameplayScene {
         if let gameplayScene = GameplayScene(fileNamed: "GameplayScene") {
             if IphoneTypeService.shared.isIphoneX() { gameplayScene.scaleMode = .aspectFill }
             else { gameplayScene.scaleMode = .aspectFill }
-            self.view?.presentScene(gameplayScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
+            self.view?.presentScene(gameplayScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.25)))
         }
     }
 }
@@ -385,7 +396,7 @@ extension GameplayScene {
 
 
 
-// MARK: extension for delegate notifications (app state)
+// MARK: extension for delegate notifications (app state) (NOT USED) !!!
 extension GameplayScene {
     func initializeDelegateNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(GameplayScene.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
@@ -394,6 +405,7 @@ extension GameplayScene {
     
     @objc
     func appDidBecomeActive() {
+        print("dsadsa")
         if !canMoveToMainMenu {
             startOctogons()
         }
@@ -411,7 +423,6 @@ extension GameplayScene {
             octogon.stopAnimation()
         }
         lastOctogon.stopIncreasing()
-        startTimer.invalidate()
     }
     
     func startOctogons() {

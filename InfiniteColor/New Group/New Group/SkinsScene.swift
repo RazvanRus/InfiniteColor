@@ -14,7 +14,7 @@
  3. the currentParts colours should be grayed our from the colors list and them can not be used to change another currentParts colour. partialy Done (need image)
  4. messages for when you dont have enought bonus points to buy a part. (need image)
  5. selected octogon parts should have a border, notAvaileble colors should have a Black sprite (or smth) with number of points needed for the unlocking (need image)
- 6. get priceint depending on index ( first 10 will be 50 points, next 10 100, next 10 150, next 10 200, last 5 250) - done
+ 6. get priceint depending on index ( first 10 will be 50 points, next 10 100, next 10 150, next 10 200, last 5 250) - done (need image for priceing)
  7. message when you try to buy (are you shure you want to spend 50/100/,, coins for this skin? yes/no) (need image)
  
  */
