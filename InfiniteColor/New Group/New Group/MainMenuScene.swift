@@ -15,7 +15,6 @@ class MainMenuScene: SKScene {
     
     override func didMove(to view: SKView) {
         initialize()
-//        initializeDelegateNotifications()
     }
     
     func initialize() {
@@ -25,6 +24,16 @@ class MainMenuScene: SKScene {
         if GameService.shared.getVibrationStatus() { self.childNode(withName: "VibrationButton")?.alpha = 1 }
         else { self.childNode(withName: "VibrationButton")?.alpha = 0.4 }
         AudioService.shared.turnDownBackgroundSound()
+        }
+    
+    func getPartBlue() {
+        let part = SKSpriteNode(imageNamed: "ffffff")
+        part.size = CGSize(width: 150, height: 50)
+        part.position = CGPoint(x: 0, y: 300)
+        part.colorBlendFactor = 1
+        part.color = .red
+        part.zPosition = 30
+        self.addChild(part)
     }
     
     func getLabels() {
@@ -34,21 +43,26 @@ class MainMenuScene: SKScene {
     }
     
     func getHighscore() {
-        if let highscoreLabel = self.childNode(withName: "HighscoreLabel") as? SKLabelNode {
-            highscoreLabel.text = "\(GameService.shared.getHighscore())"
-        }
+        let highscoreLabel = ScoreLabel()
+        highscoreLabel.initialize(withScore: "\(GameService.shared.getHighscore())", description: "Highscore", fontSize: 70)
+        highscoreLabel.set(position: CGPoint(x: 0, y: 200))
+        self.addChild(highscoreLabel)
     }
     
     func getBonusPoints() {
-        if let bonusPointsLabel = self.childNode(withName: "BonusPointsLabel") as? SKLabelNode {
-            bonusPointsLabel.text = "\(GameService.shared.getBonusPoints())"
-        }
+        let bonusPointsLabel = ScoreLabel()
+        bonusPointsLabel.initialize(withScore: "\(GameService.shared.getBonusPoints())", description: "Bonus", fontSize: 50)
+        bonusPointsLabel.set(position: CGPoint(x: -250, y: 0))
+        bonusPointsLabel.createExtraDescriptionLabel(withText: "Points")
+        self.addChild(bonusPointsLabel)
     }
     
     func getHighestCombo() {
-        if let highestComboLabel = self.childNode(withName: "HighestComboLabel") as? SKLabelNode {
-            highestComboLabel.text = "x\(GameService.shared.getHighestCombo())"
-        }
+        let highestComboLabel = ScoreLabel()
+        highestComboLabel.initialize(withScore: "x\(GameService.shared.getHighestCombo())", description: "Highest", fontSize: 50)
+        highestComboLabel.set(position: CGPoint(x: 260, y: 0))
+        highestComboLabel.createExtraDescriptionLabel(withText: "Combo")
+        self.addChild(highestComboLabel)
     }
     
     func createPlayButton() {
@@ -73,19 +87,18 @@ class MainMenuScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
-            if atPoint(location).name == "PlayButton" || atPoint(location).parent?.name == "PlayButton" { presentGameplayScene(); dealocateOctogons() }
-            if atPoint(location).name == "SkinsButton" { presentSkinsScene(); dealocateOctogons() }
+            if atPoint(location).name == "PlayButton" || atPoint(location).parent?.name == "PlayButton" { presentGameplayScene() }
+            if atPoint(location).name == "SkinsButton" { presentSkinsScene() }
             if atPoint(location).name == "VibrationButton" {
                 if !GameService.shared.getVibrationStatus() {
                     AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-                    atPoint(location).alpha = 1
+                    atPoint(location).alpha = 0.9
                 }else { atPoint(location).alpha = 0.4}
                 GameService.shared.changeVibrationStatus()
             }
         }
     }
     
-    func dealocateOctogons() { appWillResignActive() }
     
     func presentGameplayScene() {
         if let gameplayScene = GameplayScene(fileNamed: "GameplayScene") {
@@ -107,15 +120,3 @@ class MainMenuScene: SKScene {
 }
 
 
-// MARK: extension for delegate notifications (app state) (NOT USED !!!)
-extension MainMenuScene {
-    func initializeDelegateNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(MainMenuScene.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(MainMenuScene.appWillResignActive), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-    }
-    
-    @objc
-    func appDidBecomeActive() {}
-    @objc
-    func appWillResignActive() {}
-}

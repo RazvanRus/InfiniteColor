@@ -35,9 +35,11 @@ class SkinsScene: SKScene {
     }
     
     func getBonusPoints() {
-        if let bonusPointsLabel = self.childNode(withName: "BonusPointsLabel") as? SKLabelNode {
-            bonusPointsLabel.text = "\(GameService.shared.getBonusPoints())"
-        }
+        let bonusPointsLabel = ScoreLabel()
+        bonusPointsLabel.initialize(withScore: "\(GameService.shared.getBonusPoints())", description: "Bonus", fontSize: 50)
+        bonusPointsLabel.set(position: CGPoint(x: -280, y: 580))
+        bonusPointsLabel.createExtraDescriptionLabel(withText: "Points")
+        self.addChild(bonusPointsLabel)
     }
     
     func createSkinColors() {

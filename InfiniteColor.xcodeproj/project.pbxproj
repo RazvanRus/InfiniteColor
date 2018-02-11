@@ -30,6 +30,7 @@
 		2902EC602010AF96000F5182 /* GameplayScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2902EC5F2010AF96000F5182 /* GameplayScene.swift */; };
 		2902EC622010B94F000F5182 /* Octogon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2902EC612010B94F000F5182 /* Octogon.swift */; };
 		2902EC642010D4AF000F5182 /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2902EC632010D4AF000F5182 /* Circle.swift */; };
+		290ACDAA202CAE3E0068929A /* ScoreLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 290ACDA9202CAE3E0068929A /* ScoreLabel.swift */; };
 		293F529C201A066000CD4FE1 /* EndGamePannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293F529B201A066000CD4FE1 /* EndGamePannel.swift */; };
 		293F529E201A2B4700CD4FE1 /* ZPositionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293F529D201A2B4700CD4FE1 /* ZPositionService.swift */; };
 		29596A3E201BAD8300F2839B /* Part.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29596A3D201BAD8300F2839B /* Part.swift */; };
@@ -64,6 +65,7 @@
 		2902EC5F2010AF96000F5182 /* GameplayScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameplayScene.swift; sourceTree = "<group>"; };
 		2902EC612010B94F000F5182 /* Octogon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Octogon.swift; sourceTree = "<group>"; };
 		2902EC632010D4AF000F5182 /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
+		290ACDA9202CAE3E0068929A /* ScoreLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreLabel.swift; sourceTree = "<group>"; };
 		293F529B201A066000CD4FE1 /* EndGamePannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGamePannel.swift; sourceTree = "<group>"; };
 		293F529D201A2B4700CD4FE1 /* ZPositionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPositionService.swift; sourceTree = "<group>"; };
 		29596A3D201BAD8300F2839B /* Part.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Part.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 				2902EC532010AD7B000F5182 /* SceneView */,
 				293F529B201A066000CD4FE1 /* EndGamePannel.swift */,
 				29596A3F201CB1F000F2839B /* PerfectMoveLabel.swift */,
+				290ACDA9202CAE3E0068929A /* ScoreLabel.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -288,6 +291,7 @@
 				2902EC602010AF96000F5182 /* GameplayScene.swift in Sources */,
 				293F529E201A2B4700CD4FE1 /* ZPositionService.swift in Sources */,
 				293F529C201A066000CD4FE1 /* EndGamePannel.swift in Sources */,
+				290ACDAA202CAE3E0068929A /* ScoreLabel.swift in Sources */,
 				29596A3E201BAD8300F2839B /* Part.swift in Sources */,
 				29020776201F331E000D58E8 /* IphoneTypeService.swift in Sources */,
 				2902EC402010AD56000F5182 /* GameViewController.swift in Sources */,

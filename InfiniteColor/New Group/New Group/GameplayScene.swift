@@ -19,7 +19,7 @@ class GameplayScene: SKScene {
     var octogons: [Octogon] = []
     var circle = Circle()
     
-    var canTouch = true
+    var canTouch = false
     var canMoveToMainMenu = false
     
     var scoreLabel: SKLabelNode?
@@ -28,7 +28,7 @@ class GameplayScene: SKScene {
     override func didMove(to view: SKView) {
         resetServices()
 
-  //      initializeDelegateNotifications()
+        initializeDelegateNotifications()
         initializeLabels()
         if ReviveGameService.shared.isPlayerRevived { initializeForRevivePlayer() } else { initialize() }
     }
@@ -56,7 +56,8 @@ class GameplayScene: SKScene {
         actualOctogon.move(toParent: self)
         lastOctogon.move(toParent: self)
         createCircle(for: actualOctogon)
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { self.startOctogons() }
+        circle.scaleUpAnimation()
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { self.canTouch = true; self.startOctogons() }
     }
     
     func initializeForRevivePlayer() {
@@ -66,7 +67,7 @@ class GameplayScene: SKScene {
         if ReviveGameService.shared.octogonsSize.count % 2 == 1 { spinningFactor *= -1 }
         OctogonService.shared.spinningAngle = ReviveGameService.shared.spinningAngle
         incrementScore(by: ReviveGameService.shared.score)
-        
+        self.canTouch = true
         createOctogonsForRevive()
     }
     
@@ -87,7 +88,7 @@ class GameplayScene: SKScene {
         if canMoveToMainMenu {
             for touch in touches {
                 let location = touch.location(in: self)
-                if atPoint(location).name == "EndGameReviveLabel" {
+                if atPoint(location).name == "EGPReviveButton" {
                     if let scoreText = scoreLabel?.text, let score = Int(scoreText) {
                         prepareForRevive(withScore: score)
                         presentGameplayScene()
@@ -192,7 +193,6 @@ class GameplayScene: SKScene {
         canTouch = false
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2*CircleService.shared.animationDuration) { self.canTouch = true }
         if scoreMultiplier > GameService.shared.getHighestCombo() { GameService.shared.set(highestCombo: scoreMultiplier) }
-
         if canMoveToNextOctogon() {
             if lastOctogon.radiansRotation <= CGFloat(3.8) {
                 AudioService.shared.playSoundEffect("perfect")
@@ -374,7 +374,7 @@ extension GameplayScene {
         let endGamePannel = EndGamePannel()
         endGamePannel.initialize(withScore: score)
         self.addChild(endGamePannel)
-        scoreLabel?.removeFromParent()
+//        scoreLabel?.removeFromParent()
     }
     
     func presentMainMenu() {
@@ -396,7 +396,7 @@ extension GameplayScene {
 
 
 
-// MARK: extension for delegate notifications (app state) (NOT USED) !!!
+// MARK: extension for delegate notifications (app state) !!!
 extension GameplayScene {
     func initializeDelegateNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(GameplayScene.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
@@ -404,31 +404,18 @@ extension GameplayScene {
     }
     
     @objc
-    func appDidBecomeActive() {
-        print("dsadsa")
-        if !canMoveToMainMenu {
-            startOctogons()
-        }
-        AudioService.shared.resumeBackgroundSound()
-    }
+    func appDidBecomeActive() { if !canMoveToMainMenu { DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1, execute: { self.startOctogons() }) } }
     
     @objc
-    func appWillResignActive() {
-        stopOctogons()
-        AudioService.shared.pauseBackgrounSound()
-    }
+    func appWillResignActive() { stopOctogons() }
     
     func stopOctogons() {
-        for octogon in octogons {
-            octogon.stopAnimation()
-        }
+        for octogon in octogons { octogon.stopAnimation() }
         lastOctogon.stopIncreasing()
     }
     
     func startOctogons() {
-        for octogon in octogons {
-            octogon.startAnimation()
-        }
+        for octogon in octogons { octogon.startAnimation() }
         lastOctogon.increaseRadiansRotation()
     }
 }
