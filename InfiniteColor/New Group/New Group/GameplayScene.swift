@@ -13,6 +13,7 @@ class GameplayScene: SKScene {
     // MARK: variables
     var spinningFactor: CGFloat = 1
     var scoreMultiplier = 1
+    var highestCombo = 0
     
     var lastOctogon = Octogon()
     var actualOctogon = Octogon()
@@ -67,6 +68,7 @@ class GameplayScene: SKScene {
         if ReviveGameService.shared.octogonsSize.count % 2 == 1 { spinningFactor *= -1 }
         OctogonService.shared.spinningAngle = ReviveGameService.shared.spinningAngle
         incrementScore(by: ReviveGameService.shared.score)
+        highestCombo = ReviveGameService.shared.highestCombo
         self.canTouch = true
         createOctogonsForRevive()
     }
@@ -193,6 +195,7 @@ class GameplayScene: SKScene {
         canTouch = false
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2*CircleService.shared.animationDuration) { self.canTouch = true }
         if scoreMultiplier > GameService.shared.getHighestCombo() { GameService.shared.set(highestCombo: scoreMultiplier) }
+        if scoreMultiplier > highestCombo { highestCombo = scoreMultiplier }
         if canMoveToNextOctogon() {
             if lastOctogon.radiansRotation <= CGFloat(3.8) {
                 AudioService.shared.playSoundEffect("perfect")
@@ -356,6 +359,7 @@ extension GameplayScene {
     func prepareForRevive(withScore score: Int) {
         ReviveGameService.shared.isPlayerRevived = true
         ReviveGameService.shared.score = score
+        ReviveGameService.shared.highestCombo = highestCombo
         ReviveGameService.shared.spinningFactor = spinningFactor
         ReviveGameService.shared.spinningAngle = OctogonService.shared.spinningAngle
         
@@ -372,7 +376,7 @@ extension GameplayScene {
     
     func createEndGamePannel(withScore score: Int) {
         let endGamePannel = EndGamePannel()
-        endGamePannel.initialize(withScore: score)
+        endGamePannel.initialize(withScore: score, andCombo: highestCombo)
         self.addChild(endGamePannel)
 //        scoreLabel?.removeFromParent()
     }

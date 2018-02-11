@@ -85,6 +85,7 @@ class Octogon: SKSpriteNode {
         let scale = SKAction.scale(by: OctogonService.shared.getScale(), duration: OctogonService.shared.animationDuration)
         let group = SKAction.group([rotate,scale])
 
+        self.removeAllActions()
         self.run(group)
         
         animationTimer.invalidate()

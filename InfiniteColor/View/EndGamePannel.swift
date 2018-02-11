@@ -9,12 +9,13 @@
 import SpriteKit
 
 class EndGamePannel: SKSpriteNode {
-    func initialize(withScore score: Int) {
+    func initialize(withScore score: Int, andCombo combo: Int) {
         createEndGamePannel()
         createTextLabel()
         createScoreLabel(withScore: score)
+        createComboLabel(withCombo: combo)
         createQuitButton()
- //       if ReviveGameService.shared.canPlayerBeRevived { createReviveButton() }
+        if ReviveGameService.shared.canPlayerBeRevived { createReviveButton() }
     }
     
     func createEndGamePannel() {
@@ -24,13 +25,13 @@ class EndGamePannel: SKSpriteNode {
         self.size = CGSize(width: 750, height: 1334)
         self.zPosition = 10
         self.color = SKColor.black
-        self.alpha = 0.85
+        self.alpha = 0.9
     }
     
     func createTextLabel() {
         let textLabel = SKLabelNode()
         textLabel.name = "EGPTextLabel"
-        textLabel.position = CGPoint(x: 0, y: 400)
+        textLabel.position = CGPoint(x: 0, y: 450)
         textLabel.text = "Game Over"
         
         textLabel.fontName = "AvenirNext-Regular"
@@ -39,12 +40,27 @@ class EndGamePannel: SKSpriteNode {
         textLabel.alpha = 0.65
         
         self.addChild(textLabel)
+        //animation(forTextLabel: textLabel)
     }
     
+    func animation(forTextLabel label: SKLabelNode) {
+        let part1 = SKAction.run { label.text = "Game"; label.position.x = -128 }
+        //let part2 = SKAction.run { label.text = "Over"; label.position.x = 152 }
+        let part3 = SKAction.run { label.text = "Game Over"; label.position.x = 0 }
+        let part4 = SKAction.run { label.text = "" }
+        let wait1 = SKAction.wait(forDuration: TimeInterval(0.5))
+        let wait2 = SKAction.wait(forDuration: TimeInterval(0.25))
+
+        let sequence = SKAction.sequence([wait2,part1,wait2,part3,wait2,part1,wait2,part3,wait1,part4,wait2,part3])
+        let repeatAction = SKAction.repeatForever(sequence)
+        
+        label.run(repeatAction)
+    }
+ 
     func createScoreLabel(withScore score: Int) {
         let scoreTextLabel = SKLabelNode()
         scoreTextLabel.name = "EGPScorTextLabel"
-        scoreTextLabel.position = CGPoint(x: 0, y: 75)
+        scoreTextLabel.position = CGPoint(x: 0, y: 70)
         scoreTextLabel.text = "Score"
         scoreTextLabel.fontName = "AvenirNext-Regular"
         scoreTextLabel.fontSize = 70
@@ -55,7 +71,7 @@ class EndGamePannel: SKSpriteNode {
         
         let scoreLabel = SKLabelNode()
         scoreLabel.name = "EGPScoreLabel"
-        scoreLabel.position = CGPoint(x: 0, y: 150)
+        scoreLabel.position = CGPoint(x: -150, y: 200)
         scoreLabel.text = "\(score)"
         scoreLabel.fontName = "AvenirNext-DemiBold"
         scoreLabel.fontSize = 100
@@ -67,7 +83,7 @@ class EndGamePannel: SKSpriteNode {
         self.addChild(scoreLabel)
         scoreLabel.addChild(scoreTextLabel)
         
-        if score >= GameService.shared.getHighscore() { createNewHighscoreTextLabel(forLabel: scoreLabel)}
+        if score >= GameService.shared.getHighscore() { createNewHighscoreTextLabel(forLabel: scoreLabel) }
     }
     
     func createNewHighscoreTextLabel(forLabel scoreLabel: SKLabelNode) {
@@ -77,7 +93,7 @@ class EndGamePannel: SKSpriteNode {
         newHighscoreLabel.text = "Highscore"
         
         newHighscoreLabel.fontName = "AvenirNext-Regular"
-        newHighscoreLabel.fontSize = 35
+        newHighscoreLabel.fontSize = 38
         newHighscoreLabel.fontColor = SKColor.white
         newHighscoreLabel.horizontalAlignmentMode = .center
         newHighscoreLabel.verticalAlignmentMode = .center
@@ -92,85 +108,113 @@ class EndGamePannel: SKSpriteNode {
         quitButton.position = CGPoint(x: -10, y: -400)
         quitButton.text = "Tap to quit"
 
-        quitButton.fontName = "AvenirNext-Regular"
+        quitButton.fontName = "AvenirNext-Medium"
         quitButton.fontSize = 90
         quitButton.fontColor = SKColor.white
         quitButton.alpha = 0.65
         
         self.addChild(quitButton)
-        animation(quitButton)
+        animation(forQuitButton: quitButton)
     }
     
-    func animation(_ button: SKLabelNode) {
+    func animation(forQuitButton button: SKLabelNode) {
         let part1 = SKAction.run { button.text = "Tap to quit."; button.position.x += 9.5 }
-        let wait1 = SKAction.wait(forDuration: TimeInterval(0.4))
         let part2 = SKAction.run { button.text = "Tap to quit.."; button.position.x += 11.5 }
-        let wait2 = SKAction.wait(forDuration: TimeInterval(0.4))
         let part3 = SKAction.run { button.text = "Tap to quit"; button.position.x = -10 }
-        let wait3 = SKAction.wait(forDuration: TimeInterval(0.4))
+        let wait = SKAction.wait(forDuration: TimeInterval(0.4))
 
-        let sequence = SKAction.sequence([wait1,part1,wait2,part2,wait3,part3])
+        let sequence = SKAction.sequence([wait,part1,wait,part2,wait,part3])
         let repeatAction = SKAction.repeatForever(sequence)
         
         button.run(repeatAction)
     }
     
     func createReviveButton() {
+        let reviveHolder = SKSpriteNode(imageNamed: "ffffffCircle")
+        reviveHolder.size = CGSize(width: 250, height: 250)
+        reviveHolder.position = CGPoint(x: 0, y: -110)
+        reviveHolder.name = "EGPReviveButton"
+        reviveHolder.colorBlendFactor = 1
+        reviveHolder.color = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 0.75)
+//        reviveHolder.color = .lightGray
+        reviveHolder.alpha = 0.9
+        reviveHolder.zPosition = 11
+        
+        
         let reviveButtonPart1 = SKLabelNode()
         reviveButtonPart1.name = "EGPReviveButton"
-        reviveButtonPart1.position = CGPoint(x: 0, y: -165)
-        reviveButtonPart1.text = "Tap to"
+        reviveButtonPart1.position = CGPoint(x: 0, y: 0)
+        reviveButtonPart1.text = "Revive"
         
-        reviveButtonPart1.fontName = "AvenirNext-Regular"
-        reviveButtonPart1.fontSize = 90
-        reviveButtonPart1.fontColor = SKColor.white
-        reviveButtonPart1.alpha = 0.65
+        reviveButtonPart1.fontName = "AvenirNext-Medium"
+        reviveButtonPart1.fontSize = 65
+        reviveButtonPart1.fontColor = SKColor.black
+        reviveButtonPart1.alpha = 1
+        reviveButtonPart1.verticalAlignmentMode = .center
+        reviveButtonPart1.horizontalAlignmentMode = .center
+        reviveButtonPart1.zPosition = 20
         
-        self.addChild(reviveButtonPart1)
+        reviveHolder.addChild(reviveButtonPart1)
+        self.addChild(reviveHolder)
         
-        let reviveButtonPart2 = SKLabelNode()
-        reviveButtonPart2.name = "EGPReviveButton"
-        reviveButtonPart2.position = CGPoint(x: 0, y: -70)
-        reviveButtonPart2.text = "revive"
-        
-        reviveButtonPart2.fontName = "AvenirNext-Regular"
-        reviveButtonPart2.fontSize = 90
-        reviveButtonPart2.fontColor = SKColor.white
-        reviveButtonPart2.alpha = 1
-        
-        reviveButtonPart1.addChild(reviveButtonPart2)
+//        let reviveButtonPart2 = SKLabelNode()
+//        reviveButtonPart2.name = "EGPReviveButton"
+//        reviveButtonPart2.position = CGPoint(x: 0, y: -70)
+//        reviveButtonPart2.text = "revive"
+//
+//        reviveButtonPart2.fontName = "AvenirNext-Regular"
+//        reviveButtonPart2.fontSize = 90
+//        reviveButtonPart2.fontColor = SKColor.white
+//        reviveButtonPart2.alpha = 1
+//
+//        reviveButtonPart1.addChild(reviveButtonPart2)
     }
     
-    
-    
-    
-    
-    // MARK: NOT USED!!
-    func createNewHigherComboLabel(withCombo combo: Int) {
-        let highestComboLabel = SKLabelNode()
-        highestComboLabel.name = "EGPHighestComboLabel"
-        highestComboLabel.position = CGPoint(x: 0, y: 300)
-        highestComboLabel.text = "x\(combo)"
+    func createComboLabel(withCombo combo: Int) {
+        let comboTextLabel = SKLabelNode()
+        comboTextLabel.name = "EGPComboTextLabel"
+        comboTextLabel.position = CGPoint(x: 0, y: 65)
+        comboTextLabel.text = "Combo"
+        comboTextLabel.fontName = "AvenirNext-Regular"
+        comboTextLabel.fontSize = 53
+        comboTextLabel.fontColor = SKColor.white
+        comboTextLabel.horizontalAlignmentMode = .center
+        comboTextLabel.verticalAlignmentMode = .center
+        comboTextLabel.alpha = 1
         
-        highestComboLabel.fontName = "AvenirNext-DemiBold"
-        highestComboLabel.fontSize = 100
-        highestComboLabel.fontColor = SKColor.white
-        highestComboLabel.alpha = 0.65
+        let comboLabel = SKLabelNode()
+        comboLabel.name = "EGPComboLabel"
+        comboLabel.position = CGPoint(x: 150, y: 205)
+        comboLabel.text = "x\(combo)"
+        comboLabel.fontName = "AvenirNext-DemiBold"
+        comboLabel.fontSize = 100
+        comboLabel.fontColor = SKColor.white
+        comboLabel.horizontalAlignmentMode = .center
+        comboLabel.verticalAlignmentMode = .center
+        comboLabel.alpha = 0.65
         
-        self.addChild(highestComboLabel)
+        self.addChild(comboLabel)
+        comboLabel.addChild(comboTextLabel)
         
+        if combo >= GameService.shared.getHighestCombo() { createNewHighestComboLabel(forLabel: comboLabel); comboTextLabel.position.y = -60 }
+    }
+    
+    func createNewHighestComboLabel(forLabel comboLabel: SKLabelNode) {
         let newHighestComboLabel = SKLabelNode()
         newHighestComboLabel.name = "EGPNewHighestComboLabel"
-        newHighestComboLabel.position = CGPoint(x: 0, y: 250)
-        newHighestComboLabel.text = "New Highest Combo"
+        newHighestComboLabel.position = CGPoint(x: 0, y: 60)
+        newHighestComboLabel.text = "Highest"
         
         newHighestComboLabel.fontName = "AvenirNext-Regular"
-        newHighestComboLabel.fontSize = 70
+        newHighestComboLabel.fontSize = 50
         newHighestComboLabel.fontColor = SKColor.white
-        newHighestComboLabel.alpha = 0.65
+        newHighestComboLabel.horizontalAlignmentMode = .center
+        newHighestComboLabel.verticalAlignmentMode = .center
+        newHighestComboLabel.alpha = 1
         
-        self.addChild(newHighestComboLabel)
+        comboLabel.addChild(newHighestComboLabel)
     }
 }
+
 
 

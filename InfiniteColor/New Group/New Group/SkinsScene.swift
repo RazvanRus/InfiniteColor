@@ -35,7 +35,9 @@ class SkinsScene: SKScene {
     }
     
     func getBonusPoints() {
+        self.childNode(withName: "BonusPointsLabel")?.removeFromParent()
         let bonusPointsLabel = ScoreLabel()
+        bonusPointsLabel.name = "BonusPointsLabel"
         bonusPointsLabel.initialize(withScore: "\(GameService.shared.getBonusPoints())", description: "Bonus", fontSize: 50)
         bonusPointsLabel.set(position: CGPoint(x: -280, y: 580))
         bonusPointsLabel.createExtraDescriptionLabel(withText: "Points")

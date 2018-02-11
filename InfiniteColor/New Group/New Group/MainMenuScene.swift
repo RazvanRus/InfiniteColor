@@ -18,6 +18,7 @@ class MainMenuScene: SKScene {
     }
     
     func initialize() {
+//        GameService.shared.set(bonusPoints: 654)
         OctogonService.shared.getParts()
         getLabels()
         createPlayButton()

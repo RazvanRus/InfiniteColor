@@ -17,12 +17,14 @@ class ReviveGameService {
     var canPlayerBeRevived = true
     
     var score = 0
+    var highestCombo = 1
     var spinningAngle: CGFloat = 2.5
     var spinningFactor: CGFloat = 1
     var octogonsSize: [CGSize] = []
     
     func reset() {
         score = 0
+        highestCombo = 1
         spinningAngle = 2.5
         spinningFactor = 1
         octogonsSize = []
