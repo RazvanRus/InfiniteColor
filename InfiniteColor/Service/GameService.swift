@@ -9,9 +9,17 @@
 
 import Foundation
 
+enum GameMode: Int {
+    case easy = 1
+    case normal = 2
+    case insane = 4
+}
+
 class GameService {
     private init() {}
     static let shared = GameService()
+    
+    var gameMode = GameMode.normal
     
     func set(highscore points: Int) {
         UserDefaults.standard.set(points, forKey: "RusRazvan.InfiniteColor.highscore")

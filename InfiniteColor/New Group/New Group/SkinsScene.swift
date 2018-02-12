@@ -76,12 +76,15 @@ class SkinsScene: SKScene {
             let location = touch.location(in: self)
             if atPoint(location).name == "CancelButton" { presentMainMenu() }
             if let octogonPart = atPoint(location) as? Part { changeSelectedPart(with: octogonPart) }
-            if let colorTemplate = atPoint(location) as? ColorTemplate {
-                if colorTemplate.isAvailable { changeColor(with: colorTemplate) }else { buy(colorTemplate) }
-                deleteSkinColor()
-                createSkinColors()
-            }
+            if let colorTemplate = atPoint(location) as? ColorTemplate { colorTapped(colorTemplate) }
+            if let colorTemplate = atPoint(location).parent as? ColorTemplate { colorTapped(colorTemplate) }
         }
+    }
+    
+    func colorTapped(_ colorTemplate: ColorTemplate) {
+        if colorTemplate.isAvailable { changeColor(with: colorTemplate) }else { buy(colorTemplate) }
+        deleteSkinColor()
+        createSkinColors()
     }
     
     func changeSelectedPart(with part: Part) {
@@ -92,7 +95,7 @@ class SkinsScene: SKScene {
     
     func changeColor(with color: ColorTemplate) {
         if let colorName = color.name {
-            if OctogonService.shared.currentParts.contains(colorName) {
+            if OctogonService.shared.normalModeParts.contains(colorName) {
                 // message that color selected is already used !
             }else {
                 OctogonService.shared.substitute(currentPart: selectedPart, with: colorName)
@@ -110,7 +113,10 @@ class SkinsScene: SKScene {
             GameService.shared.set(bonusPoints: GameService.shared.getBonusPoints() - colorTemplate.cost)
             getBonusPoints()
         } else {
-            //print("not enough bonus points")
+            let notEnoughPointsPanel = NotEnoughPointsLabel()
+            notEnoughPointsPanel.initialize()
+            notEnoughPointsPanel.animate()
+            self.addChild(notEnoughPointsPanel)
         }
     }
     

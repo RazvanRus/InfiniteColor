@@ -20,6 +20,7 @@ class MainMenuScene: SKScene {
     func initialize() {
 //        GameService.shared.set(bonusPoints: 654)
         OctogonService.shared.getParts()
+        getMode()
         getLabels()
         createPlayButton()
         if GameService.shared.getVibrationStatus() { self.childNode(withName: "VibrationButton")?.alpha = 1 }
@@ -27,15 +28,11 @@ class MainMenuScene: SKScene {
         AudioService.shared.turnDownBackgroundSound()
         }
     
-    func getPartBlue() {
-        let part = SKSpriteNode(imageNamed: "ffffff")
-        part.size = CGSize(width: 150, height: 50)
-        part.position = CGPoint(x: 0, y: 300)
-        part.colorBlendFactor = 1
-        part.color = .red
-        part.zPosition = 30
-        self.addChild(part)
+    func getMode() {
+        GameService.shared.gameMode = .easy
+        OctogonService.shared.currentParts = OctogonService.shared.easyModeParts
     }
+
     
     func getLabels() {
         getHighestCombo()
@@ -96,7 +93,7 @@ class MainMenuScene: SKScene {
                 self.addChild(notAvailablePanel)
             }
             if atPoint(location).name == "PlayButton" || atPoint(location).parent?.name == "PlayButton" { presentGameplayScene() }
-            if atPoint(location).name == "SkinsButton" { presentSkinsScene() }
+            if atPoint(location).name == "SkinsButton" { OctogonService.shared.currentParts = OctogonService.shared.normalModeParts; presentSkinsScene() }
             if atPoint(location).name == "VibrationButton" {
                 if !GameService.shared.getVibrationStatus() {
                     AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))

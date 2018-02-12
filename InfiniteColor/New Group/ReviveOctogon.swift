@@ -6,7 +6,7 @@
 //  Copyright © 2018 Rus Razvan. All rights reserved.
 //
 
-import UIKit
+import SpriteKit
 
 class ReviveOctogon: Octogon {
     override func initialize(spinningFactor: CGFloat) {

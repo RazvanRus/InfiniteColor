@@ -1,5 +1,5 @@
 //
-//  NotAvailablePanel.swift
+//  NotEnoughPointsLabel.swift
 //  InfiniteColor
 //
 //  Created by Rus Razvan on 12/02/2018.
@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class NotAvailablePanel: SKSpriteNode {
+class NotEnoughPointsLabel: SKSpriteNode {
     func initialize() {
         createPanel()
         let text = createText()
@@ -16,9 +16,9 @@ class NotAvailablePanel: SKSpriteNode {
     }
     
     func createPanel() {
-        self.name = "NotAvailablePanel"
+        self.name = "NotEnoughPointsPanel"
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        self.position = CGPoint(x: 0, y: -200)
+        self.position = CGPoint(x: 0, y: -195)
         self.color = UIColor(red: 17/255, green: 17/255, blue: 17/255, alpha: 0)
         self.size = CGSize(width: 300, height: 100)
         self.zPosition = 10
@@ -27,9 +27,9 @@ class NotAvailablePanel: SKSpriteNode {
     
     func createText() -> SKLabelNode{
         let textLabel = SKLabelNode()
-        textLabel.name = "NAPTextLabel"
+        textLabel.name = "NEPPTextLabel"
         textLabel.position = CGPoint(x: 0, y: 0)
-        textLabel.text = "Coming soon.."
+        textLabel.text = "Not enough points"
         textLabel.fontName = "AvenirNext-Medium"
         textLabel.fontSize = 50
         textLabel.fontColor = SKColor.white
@@ -41,7 +41,7 @@ class NotAvailablePanel: SKSpriteNode {
     }
     
     func animate() {
-        let fade = SKAction.fadeAlpha(to: 0.1, duration: 1)
+        let fade = SKAction.fadeAlpha(to: 0.4, duration: 1)
         let remove = SKAction.removeFromParent()
         let sequence = SKAction.sequence([fade,remove])
         self.run(sequence)
