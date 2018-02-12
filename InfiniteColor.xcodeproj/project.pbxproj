@@ -33,6 +33,9 @@
 		290ACDAA202CAE3E0068929A /* ScoreLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 290ACDA9202CAE3E0068929A /* ScoreLabel.swift */; };
 		293F529C201A066000CD4FE1 /* EndGamePannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293F529B201A066000CD4FE1 /* EndGamePannel.swift */; };
 		293F529E201A2B4700CD4FE1 /* ZPositionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293F529D201A2B4700CD4FE1 /* ZPositionService.swift */; };
+		2955942320319F7D00B677E0 /* ReviveOctogon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2955942220319F7D00B677E0 /* ReviveOctogon.swift */; };
+		295594252031A61C00B677E0 /* ResumePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295594242031A61C00B677E0 /* ResumePanel.swift */; };
+		295594272031AAF000B677E0 /* NotAvailablePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295594262031AAF000B677E0 /* NotAvailablePanel.swift */; };
 		29596A3E201BAD8300F2839B /* Part.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29596A3D201BAD8300F2839B /* Part.swift */; };
 		29596A40201CB1F000F2839B /* PerfectMoveLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29596A3F201CB1F000F2839B /* PerfectMoveLabel.swift */; };
 		2986A9672016326200B69778 /* OctogonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2986A9662016326200B69778 /* OctogonService.swift */; };
@@ -68,6 +71,9 @@
 		290ACDA9202CAE3E0068929A /* ScoreLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreLabel.swift; sourceTree = "<group>"; };
 		293F529B201A066000CD4FE1 /* EndGamePannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGamePannel.swift; sourceTree = "<group>"; };
 		293F529D201A2B4700CD4FE1 /* ZPositionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPositionService.swift; sourceTree = "<group>"; };
+		2955942220319F7D00B677E0 /* ReviveOctogon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviveOctogon.swift; sourceTree = "<group>"; };
+		295594242031A61C00B677E0 /* ResumePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumePanel.swift; sourceTree = "<group>"; };
+		295594262031AAF000B677E0 /* NotAvailablePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotAvailablePanel.swift; sourceTree = "<group>"; };
 		29596A3D201BAD8300F2839B /* Part.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Part.swift; sourceTree = "<group>"; };
 		29596A3F201CB1F000F2839B /* PerfectMoveLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfectMoveLabel.swift; sourceTree = "<group>"; };
 		2986A9662016326200B69778 /* OctogonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctogonService.swift; sourceTree = "<group>"; };
@@ -160,6 +166,8 @@
 				293F529B201A066000CD4FE1 /* EndGamePannel.swift */,
 				29596A3F201CB1F000F2839B /* PerfectMoveLabel.swift */,
 				290ACDA9202CAE3E0068929A /* ScoreLabel.swift */,
+				295594242031A61C00B677E0 /* ResumePanel.swift */,
+				295594262031AAF000B677E0 /* NotAvailablePanel.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -171,6 +179,7 @@
 				2902EC632010D4AF000F5182 /* Circle.swift */,
 				29596A3D201BAD8300F2839B /* Part.swift */,
 				2902078A20237D1E000D58E8 /* ColorTemplate.swift */,
+				2955942220319F7D00B677E0 /* ReviveOctogon.swift */,
 			);
 			name = Model;
 			path = "New Group";
@@ -284,6 +293,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2955942320319F7D00B677E0 /* ReviveOctogon.swift in Sources */,
 				2902077C201F8B1B000D58E8 /* AudioService.swift in Sources */,
 				2986A9672016326200B69778 /* OctogonService.swift in Sources */,
 				29020778201F334B000D58E8 /* GameService.swift in Sources */,
@@ -291,6 +301,7 @@
 				2902EC602010AF96000F5182 /* GameplayScene.swift in Sources */,
 				293F529E201A2B4700CD4FE1 /* ZPositionService.swift in Sources */,
 				293F529C201A066000CD4FE1 /* EndGamePannel.swift in Sources */,
+				295594252031A61C00B677E0 /* ResumePanel.swift in Sources */,
 				290ACDAA202CAE3E0068929A /* ScoreLabel.swift in Sources */,
 				29596A3E201BAD8300F2839B /* Part.swift in Sources */,
 				29020776201F331E000D58E8 /* IphoneTypeService.swift in Sources */,
@@ -300,6 +311,7 @@
 				2902EC5E2010AF82000F5182 /* MainMenuScene.swift in Sources */,
 				2902EC382010AD56000F5182 /* AppDelegate.swift in Sources */,
 				29596A40201CB1F000F2839B /* PerfectMoveLabel.swift in Sources */,
+				295594272031AAF000B677E0 /* NotAvailablePanel.swift in Sources */,
 				2902078B20237D1E000D58E8 /* ColorTemplate.swift in Sources */,
 				2902EC622010B94F000F5182 /* Octogon.swift in Sources */,
 				2902EC642010D4AF000F5182 /* Circle.swift in Sources */,

@@ -28,14 +28,16 @@ class OctogonService {
     
     var allParts = [("ffc0cb",false),("008080",false),("ff0000",true),("ffd700",false),("00ffff",false),("ff7373",false),("40e0d0",false),("ffa500",false),("0000ff",true),("b0e0e6",false),("003366",false),("800080",false),("fa8072",false),("00ff00",true),("ffff00",true),("ffb6c1",false),("20b2aa",false),("800000",false),("666666",false),("ffc3a0",false),("ff6666",true),("c39797",false),("088da5",false),("ff00ff",true),("008000",true),("0e2f44",false),("660066",false),("faebd7",false),("c6e2ff",false),("daa520",false),("990000",false),("ff7f50",false),("ff4040",false),("00ff7f",false),("ffff66",false),("3399ff",false),("8a2be2",false),("b6fcd5",false),("66cccc",false),("ccff00",false),("000080",true),("0099cc",false),("6dc066",false),("ffffff",false),("000000",false)]
     
-    
-    var currentParts = ["ff0000","0000ff","00ff00","ffff00","ff6666","ff00ff","008000","000080"]
+    // currentParts for old skins.
+//    var currentParts = ["ff0000","0000ff","00ff00","ffff00","ff6666","ff00ff","008000","000080"]
+
+    var currentParts = ["7bdae5","ca2905","7acf3d","7e48be","f1ca2e","2f84d0","4e6c26","eb59b0"]
     let rotationAngles: [CGFloat] = [3.14159,1.5708,0,4.71239,2.35619,0.785398,5.49779,3.92699]
     
     func increaseSpinningAngle() { if spinningAngle<3.4 {spinningAngle += 0.1} }
     func getScale() -> CGFloat { if isScaling {return scaleValue}else {return 1} }
     func shuffleParts() { currentParts.shuffle() }
-    func getRandomPart() -> String { shuffleParts(); return currentParts[3]}
+    func getRandomPart() -> String { return(currentParts[Int(arc4random_uniform(UInt32(currentParts.count)))]) }
     
     func getParts() {
         currentParts = getCurrentParts()
@@ -93,5 +95,27 @@ class OctogonService {
             set(currentParts: currentParts)
             return currentParts
         }
+    }
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
     }
 }

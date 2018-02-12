@@ -19,7 +19,7 @@ class MainMenuScene: SKScene {
     
     func initialize() {
 //        GameService.shared.set(bonusPoints: 654)
-        OctogonService.shared.getParts()
+//        OctogonService.shared.getParts()
         getLabels()
         createPlayButton()
         if GameService.shared.getVibrationStatus() { self.childNode(withName: "VibrationButton")?.alpha = 1 }
@@ -88,8 +88,15 @@ class MainMenuScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
+            if atPoint(location).name == "NoAdsButton" || atPoint(location).name == "SkinsButton" || atPoint(location).name == "InformationButton" {
+                self.childNode(withName: "NotAvailablePanel")?.removeFromParent()
+                let notAvailablePanel = NotAvailablePanel()
+                notAvailablePanel.initialize()
+                notAvailablePanel.animate()
+                self.addChild(notAvailablePanel)
+            }
             if atPoint(location).name == "PlayButton" || atPoint(location).parent?.name == "PlayButton" { presentGameplayScene() }
-            if atPoint(location).name == "SkinsButton" { presentSkinsScene() }
+//            if atPoint(location).name == "SkinsButton" { presentSkinsScene() }
             if atPoint(location).name == "VibrationButton" {
                 if !GameService.shared.getVibrationStatus() {
                     AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))

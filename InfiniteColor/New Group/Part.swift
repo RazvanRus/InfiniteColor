@@ -16,7 +16,9 @@ class Part: SKSpriteNode {
     }
     
     func createFirstPart(for index: Int) {
-        self.texture = SKTexture(imageNamed: OctogonService.shared.currentParts[index])
+        self.texture = SKTexture(imageNamed: "ffffff")
+        self.colorBlendFactor = 1
+        self.color = OctogonService.shared.hexStringToUIColor(hex: OctogonService.shared.currentParts[index])
         self.name = OctogonService.shared.currentParts[index]
         self.size = CGSize(width: (initialSize/7)*3, height: initialSize/7)
         var positionX: CGFloat = 0
@@ -34,7 +36,9 @@ class Part: SKSpriteNode {
     }
     
     func createSecoundPart(for index: Int) {
-        self.texture = SKTexture(imageNamed: OctogonService.shared.currentParts[index+4])
+        self.texture = SKTexture(imageNamed: "ffffff")
+        self.colorBlendFactor = 1
+        self.color = OctogonService.shared.hexStringToUIColor(hex: OctogonService.shared.currentParts[index+4])
         self.name = OctogonService.shared.currentParts[index+4]
         self.size = CGSize(width: (initialSize/7)*3, height: initialSize/7)
         var positionX: CGFloat = 0
@@ -54,7 +58,6 @@ class Part: SKSpriteNode {
         self.zRotation = OctogonService.shared.rotationAngles[index+4]
         self.zPosition = ZPositionService.shared.part
     }
-    
     
     func colorize(inTime time: TimeInterval) {
         let color = UIColor(red: 0, green: 0, blue: 0, alpha: 0.65)

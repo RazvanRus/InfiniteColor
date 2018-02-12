@@ -134,27 +134,27 @@ class GameplayScene: SKScene {
     
     func getScoreSize() -> CGFloat {
         if let scoreText = scoreLabel?.text {
-            if lastOctogon.size.height < 150 {
+            if lastOctogon.size.height < 200 {
                 switch scoreText.count {
                 case 1:
                     return lastOctogon.size.height/1.875
                 case 2:
-                    return lastOctogon.size.height/2.5
+                    return lastOctogon.size.height/2.25
                 case 3:
-                    return lastOctogon.size.height/3.5
+                    return lastOctogon.size.height/3.0
                 default:
-                    return lastOctogon.size.height/4.5
+                    return lastOctogon.size.height/4.0
                 }
             }else {
                 switch scoreText.count {
                 case 1:
-                    return 80
+                    return 107
                 case 2:
-                    return 60
+                    return 89
                 case 3:
-                    return 42.85
+                    return 67
                 default:
-                    return 30
+                    return 50
                 }
             }
         }
@@ -290,7 +290,7 @@ extension GameplayScene {
     func createOctogonsForRevive() {
         for size in ReviveGameService.shared.octogonsSize {
             actualOctogon = lastOctogon
-            lastOctogon = createOctogon(withSize: size)
+            lastOctogon = createOctogonForRevive(withSize: size)
             
             actualOctogon.stopIncreasing()
             actualOctogon.instantColorize()
@@ -301,6 +301,18 @@ extension GameplayScene {
             self.addChild(lastOctogon)
         }
         createCircle(for: actualOctogon)
+    }
+    
+    func createOctogonForRevive(withSize size: CGSize) -> Octogon {
+        let octogon = ReviveOctogon()
+        octogon.setPosition(CGPoint(x: 0, y: 0))
+        octogon.setSize(size)
+        octogon.initialize(spinningFactor: spinningFactor)
+        
+        spinningFactor *= -1
+        octogon.startAnimation()
+        
+        return octogon
     }
     
     func createOctogon(withSize size: CGSize) -> Octogon{
@@ -321,7 +333,6 @@ extension GameplayScene {
         self.addChild(octogon)
         octogons.append(octogon)
 
-        
         lastOctogon.stopIncreasing()
         actualOctogon = lastOctogon
         lastOctogon = octogon
@@ -362,6 +373,7 @@ extension GameplayScene {
         ReviveGameService.shared.highestCombo = highestCombo
         ReviveGameService.shared.spinningFactor = spinningFactor
         ReviveGameService.shared.spinningAngle = OctogonService.shared.spinningAngle
+        ReviveGameService.shared.lastOctogonParts = OctogonService.shared.currentParts
         
         for octogon in octogons {
             ReviveGameService.shared.octogonsSize.append(octogon.size)
@@ -408,10 +420,19 @@ extension GameplayScene {
     }
     
     @objc
-    func appDidBecomeActive() { if !canMoveToMainMenu { DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1, execute: { self.startOctogons() }) } }
+    func appDidBecomeActive() {
+        if !canMoveToMainMenu {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3.0, execute: { self.canTouch = true; self.startOctogons() })
+            if let resumePanel = self.childNode(withName: "ResumePanel") as? ResumePanel { resumePanel.animate() }
+        }
+    }
     
     @objc
-    func appWillResignActive() { stopOctogons() }
+    func appWillResignActive() {
+        self.canTouch = false
+        stopOctogons()
+        createResumePanel()
+    }
     
     func stopOctogons() {
         for octogon in octogons { octogon.stopAnimation() }
@@ -421,6 +442,12 @@ extension GameplayScene {
     func startOctogons() {
         for octogon in octogons { octogon.startAnimation() }
         lastOctogon.increaseRadiansRotation()
+    }
+    
+    func createResumePanel() {
+        let resumePanel = ResumePanel()
+        resumePanel.initialize()
+        self.addChild(resumePanel)
     }
 }
 

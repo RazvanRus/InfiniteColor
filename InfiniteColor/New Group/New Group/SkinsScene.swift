@@ -25,7 +25,8 @@ class SkinsScene: SKScene {
     var selectedPart = Part()
     
     override func didMove(to view: SKView) {
-        initialize()
+        //initialize()
+        createOctogon()
     }
     
     func initialize() {
@@ -67,8 +68,9 @@ class SkinsScene: SKScene {
         octogon.setSize(size)
         octogon.initialize(spinningFactor: 1)
         self.addChild(octogon)
-        selectedPart = octogon.parts.first!
-        selectedPart.isSelected()
+        octogon.colorize()
+//        selectedPart = octogon.parts.first!
+//        selectedPart.isSelected()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

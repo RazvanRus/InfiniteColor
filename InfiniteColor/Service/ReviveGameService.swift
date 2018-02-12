@@ -21,6 +21,7 @@ class ReviveGameService {
     var spinningAngle: CGFloat = 2.5
     var spinningFactor: CGFloat = 1
     var octogonsSize: [CGSize] = []
+    var lastOctogonParts: [String] = []
     
     func reset() {
         score = 0
@@ -28,5 +29,6 @@ class ReviveGameService {
         spinningAngle = 2.5
         spinningFactor = 1
         octogonsSize = []
+        lastOctogonParts = []
     }
 }

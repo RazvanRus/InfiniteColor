@@ -16,7 +16,9 @@ class Circle: SKSpriteNode {
     
     func createCircle() {
         self.name = "Circle"
-        self.texture = SKTexture(imageNamed: "\(CircleService.shared.nextPartColor)Circle")
+        self.texture = SKTexture(imageNamed: "ffffffCircle")
+        self.colorBlendFactor = 1
+        self.color = OctogonService.shared.hexStringToUIColor(hex: CircleService.shared.nextPartColor)
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.alpha = 1
         self.zPosition = ZPositionService.shared.circle
