@@ -25,8 +25,7 @@ class SkinsScene: SKScene {
     var selectedPart = Part()
     
     override func didMove(to view: SKView) {
-        //initialize()
-        createOctogon()
+        initialize()
     }
     
     func initialize() {
@@ -68,9 +67,8 @@ class SkinsScene: SKScene {
         octogon.setSize(size)
         octogon.initialize(spinningFactor: 1)
         self.addChild(octogon)
-        octogon.colorize()
-//        selectedPart = octogon.parts.first!
-//        selectedPart.isSelected()
+        selectedPart = octogon.parts.first!
+        selectedPart.isSelected()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -104,7 +102,7 @@ class SkinsScene: SKScene {
         }
     }
     
-    func updateOctogon(with colorName: String) { selectedPart.texture = SKTexture(imageNamed: colorName); selectedPart.name = colorName }
+    func updateOctogon(with colorName: String) { selectedPart.color = OctogonService.shared.hexStringToUIColor(hex: colorName); selectedPart.name = colorName }
     
     func buy(_ colorTemplate: ColorTemplate) {
         if GameService.shared.getBonusPoints() >= colorTemplate.cost {

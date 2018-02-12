@@ -175,9 +175,9 @@
 		2902EC522010AD75000F5182 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				29596A3D201BAD8300F2839B /* Part.swift */,
 				2902EC612010B94F000F5182 /* Octogon.swift */,
 				2902EC632010D4AF000F5182 /* Circle.swift */,
-				29596A3D201BAD8300F2839B /* Part.swift */,
 				2902078A20237D1E000D58E8 /* ColorTemplate.swift */,
 				2955942220319F7D00B677E0 /* ReviveOctogon.swift */,
 			);

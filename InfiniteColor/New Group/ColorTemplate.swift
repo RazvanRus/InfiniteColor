@@ -34,7 +34,7 @@ class ColorTemplate: SKSpriteNode {
     
     func setPosition(forIndex index: Int) {
         let xPosition = -312.5 + Double(125 * (index % 6))
-        let yPosition =  -(87.5 * Double(index / 6))
+        let yPosition =  25.0 - (87.5 * Double(index / 6))
         self.position = CGPoint(x: xPosition, y: yPosition)
     }
     
