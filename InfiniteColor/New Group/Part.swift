@@ -75,6 +75,13 @@ class Part: SKSpriteNode {
         self.run(sequence)
     }
     
-    func isSelected() { self.alpha = 0.4 }
-    func isNotSelected() { self.alpha = 1 }
+    func isSelected() {
+        let border = SKSpriteNode(imageNamed: "partBorder")
+        border.name = "Border"
+        border.position = CGPoint(x: 0, y: 0)
+        border.zPosition = self.zPosition + 1
+        border.size = CGSize(width: self.size.width*1.05, height: self.size.height*1.1)
+        self.addChild(border)
+    }
+    func isNotSelected() { self.childNode(withName: "Border")?.removeFromParent() }
 }

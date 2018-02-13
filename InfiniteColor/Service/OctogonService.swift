@@ -48,7 +48,7 @@ class OctogonService {
     var spinningAngle: CGFloat = 2.5
     
     var easyModeParts = ["ffeb12","00be27","006ee7","e83813","ffeb12","00be27","006ee7","e83813"]
-    var normalModeParts = ["7bdae5","ca2905","7acf3d","7e48be","f1ca2e","2f84d0","336d40","eb59b0"]
+    var normalModeParts = ["e6194b","3cb44b","ffe119","0082c8","f58231","911eb4","46f0f0","f032e6"]
     var insaneModeParts =
         [["fc0fd4","cf7e82","e301a9","9a293b","f472e8","b176a9","902577","ff99c5"],
         ["80574d","ff9381","7b4338","ffb299","9a4f1e","956364","d16b52","b98c6f"],
@@ -57,8 +57,8 @@ class OctogonService {
         ["8ab895","02e5b6","468788","95f5b0","007b6a","b9fff8","01aa90","8affcd"],
         ["04539b","8bacff","0071b0","5171d6","559ee0","0085ef","8491df","798deb"],
         ["4c4bd1","18087a","32008f","435397","1d0062","8f399c","591c55","664eaa"]]
-    var allParts = [("7e48be",true),("528f86",false),("e0c0b3",false),("abde84",false),("7acf3d",true),("9da070",false),("8a7862",false),("e0d17a",false),("6fb3dd",false),("a17885",false),("d89d72",false),("c7b4df",false),("ca2905",true),("966fa6",false),("63dfbe",false),("d83e62",false),("2f84d0",true),("5ee17e",false),("cb4081",false),("cae046",false),("872d83",false),("60819f",false),("6e75d9",false),("eb59b0",true),("9a5f2a",false),("f1ca2e",true),("c3e2b5",false),("d3736f",false),("5eaa71",false),("493f81",false),("cd81db",false),("adcecb",false),("df8bb1",false),("db6e33",false),("7bdae5",true),("cc45d3",false),("d99637",false),("336d40",true),("df423f",false),("5c3acb",false),("529d34",false),("9c9835",false)]
-    var currentParts = ["7bdae5","ca2905","7acf3d","7e48be","f1ca2e","2f84d0","336d40","eb59b0"]
+    var allParts = [("e6194b",true),("e6beff",false),("3cb44b",true),("d2f53c",false),("ffe119",true),("fabebe",false),("0082c8",true),("008080",false),("f58231",true),("aa6e28",false),("911eb4",true),("fffac8",false),("46f0f0",true),("800000",false),("aaffc3",false),("f032e6",true),("ffd8b1",false),("808000",false),("000080",false),("ffffff",false)]
+    var currentParts = ["e6194b","3cb44b","ffe119","0082c8","f58231","911eb4","46f0f0","f032e6"]
     let rotationAngles: [CGFloat] = [3.14159,1.5708,0,4.71239,2.35619,0.785398,5.49779,3.92699]
     
     func increaseSpinningAngle() { if spinningAngle<3.4 {spinningAngle += 0.1} }

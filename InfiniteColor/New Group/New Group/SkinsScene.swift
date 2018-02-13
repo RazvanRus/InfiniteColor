@@ -63,7 +63,7 @@ class SkinsScene: SKScene {
     func createOctogon() {
         let octogon = Octogon()
         octogon.setPosition(CGPoint(x: 0, y: 350))
-        let size = CGSize(width: 400, height: 400)
+        let size = CGSize(width: 375, height: 375)
         octogon.setSize(size)
         octogon.initialize(spinningFactor: 1)
         self.addChild(octogon)

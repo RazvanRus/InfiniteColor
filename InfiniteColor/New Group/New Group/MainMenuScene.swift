@@ -29,8 +29,8 @@ class MainMenuScene: SKScene {
         }
     
     func getMode() {
-        GameService.shared.gameMode = .easy
-        OctogonService.shared.currentParts = OctogonService.shared.easyModeParts
+        GameService.shared.gameMode = .normal
+        OctogonService.shared.currentParts = OctogonService.shared.normalModeParts
     }
 
     

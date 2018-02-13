@@ -11,9 +11,11 @@ import SpriteKit
 class ColorTemplate: SKSpriteNode {
     var cost = 50
     var isAvailable = false
+    var index = 0
     
     
     func initialize(withIndexPosition indexPosition: Int) {
+        index = indexPosition
         isAvailable = OctogonService.shared.allParts[indexPosition].1
         createColorTemplate(forIndex: indexPosition)
     }
@@ -22,7 +24,7 @@ class ColorTemplate: SKSpriteNode {
         let part = OctogonService.shared.allParts[index]
 
         self.name = part.0
-        self.size = CGSize(width: 110, height: 75)
+        self.size = CGSize(width: 150, height: 110)
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.zPosition = ZPositionService.shared.part
         setPosition(forIndex: index)
@@ -33,8 +35,8 @@ class ColorTemplate: SKSpriteNode {
     }
     
     func setPosition(forIndex index: Int) {
-        let xPosition = -312.5 + Double(125 * (index % 6))
-        let yPosition =  25.0 - (87.5 * Double(index / 6))
+        let xPosition = -270 + Double(180 * (index % 4))
+        let yPosition =  25.0 - (130 * Double(index / 4))
         self.position = CGPoint(x: xPosition, y: yPosition)
     }
     
@@ -42,22 +44,22 @@ class ColorTemplate: SKSpriteNode {
         if isAvailable {self.color = OctogonService.shared.hexStringToUIColor(hex: part.0)} else { notAvailable() }
     }
     
-    func setCost(forIndex index: Int) { cost = 50 * Int(index/10 + 1)}
+    func setCost(forIndex index: Int) { cost = 150 * Int(index/10 + 1)}
     
     func alreadyInUse() {
-        let gray = SKSpriteNode()
-        gray.name = "InUse"
-        gray.position = CGPoint(x: 0, y: 0)
-        gray.size = self.size
-        gray.color = .gray
-        gray.alpha = 0.7
-        gray.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        gray.zPosition = self.zPosition+1
-        self.addChild(gray)
+        let border = SKSpriteNode(imageNamed: "rectangleBorder")
+        border.name = "Border"
+        border.position = CGPoint(x: 0, y: 0)
+        border.size = self.size
+        border.alpha = 1
+        border.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        border.zPosition = self.zPosition+1
+        self.addChild(border)
     }
     
     func notAvailable() {
-        self.color = UIColor(red: 17/255, green: 17/255, blue: 17/255, alpha: 0.4)
+        if index % 3 == 1 { self.color = .red
+        }else { self.color = UIColor(red: 17/255, green: 17/255, blue: 17/255, alpha: 0.4) }
         createCostLabel()
     }
     

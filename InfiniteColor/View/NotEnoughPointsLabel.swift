@@ -31,7 +31,7 @@ class NotEnoughPointsLabel: SKSpriteNode {
         textLabel.position = CGPoint(x: 0, y: 0)
         textLabel.text = "Not enough points"
         textLabel.fontName = "AvenirNext-Medium"
-        textLabel.fontSize = 50
+        textLabel.fontSize = 70
         textLabel.fontColor = SKColor.white
         textLabel.horizontalAlignmentMode = .center
         textLabel.verticalAlignmentMode = .center
