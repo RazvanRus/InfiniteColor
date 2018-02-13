@@ -101,7 +101,7 @@ class SkinsScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
-            if atPoint(location).name == "CancelButton" { presentMainMenu() }
+            if atPoint(location).name == "ExitButton" { presentMainMenu() }
             if let octogonPart = atPoint(location) as? Part { changeSelectedPart(with: octogonPart) }
             if let colorTemplate = atPoint(location) as? ColorTemplate { colorTapped(colorTemplate) }
             else{ if let colorTemplate = atPoint(location).parent as? ColorTemplate { colorTapped(colorTemplate) } }

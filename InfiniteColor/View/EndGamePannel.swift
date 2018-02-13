@@ -23,7 +23,7 @@ class EndGamePannel: SKSpriteNode {
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.position = CGPoint(x: 0, y: 0)
         self.size = CGSize(width: 750, height: 1334)
-        self.zPosition = 10
+        self.zPosition = ZPositionService.shared.endGame
         self.color = SKColor.black
         self.alpha = 0.9
     }
@@ -138,7 +138,7 @@ class EndGamePannel: SKSpriteNode {
         reviveHolder.color = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 0.75)
 //        reviveHolder.color = .lightGray
         reviveHolder.alpha = 0.9
-        reviveHolder.zPosition = 11
+        reviveHolder.zPosition = self.zPosition+1
         
         
         let reviveButtonPart1 = SKLabelNode()
@@ -152,7 +152,7 @@ class EndGamePannel: SKSpriteNode {
         reviveButtonPart1.alpha = 1
         reviveButtonPart1.verticalAlignmentMode = .center
         reviveButtonPart1.horizontalAlignmentMode = .center
-        reviveButtonPart1.zPosition = 20
+        reviveButtonPart1.zPosition = self.zPosition+1
         
         reviveHolder.addChild(reviveButtonPart1)
         self.addChild(reviveHolder)

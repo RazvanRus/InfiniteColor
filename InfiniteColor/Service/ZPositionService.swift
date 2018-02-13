@@ -17,6 +17,7 @@ class ZPositionService {
     let octogon: CGFloat = 1
     let part: CGFloat = 2
     let circle: CGFloat = 4
-    let score: CGFloat = 8
+    let label: CGFloat = 8
     let endGame: CGFloat = 16
+    let anything: CGFloat = 32
 }

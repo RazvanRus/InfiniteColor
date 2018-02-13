@@ -50,13 +50,9 @@ class OctogonService {
     var easyModeParts = ["ffeb12","00be27","006ee7","e83813","ffeb12","00be27","006ee7","e83813"]
     var normalModeParts = ["e6194b","3cb44b","ffe119","0082c8","f58231","911eb4","46f0f0","f032e6"]
     var insaneModeParts =
-        [["fc0fd4","cf7e82","e301a9","9a293b","f472e8","b176a9","902577","ff99c5"],
-        ["80574d","ff9381","7b4338","ffb299","9a4f1e","956364","d16b52","b98c6f"],
-        ["8b7844","ffb844","958b77","d17122","f5dda6","a75a1b","976c4d","7b5700"],
-        ["fffba2","33fe5c","55745c","ffdc21","00dc5e","ddddc9","309e00","7a8a00"],
-        ["8ab895","02e5b6","468788","95f5b0","007b6a","b9fff8","01aa90","8affcd"],
-        ["04539b","8bacff","0071b0","5171d6","559ee0","0085ef","8491df","798deb"],
-        ["4c4bd1","18087a","32008f","435397","1d0062","8f399c","591c55","664eaa"]]
+        [["63c985","316a41","4fd36a","95c8a0","28b0f0","305a8a","96bfe4","3d82b1"],
+         ["63c985","316a41","4fd36a","95c8a0","c11525","9b111e","740c16","f75b53"],
+         ["c11525","9b111e","740c16","f75b53","28b0f0","305a8a","96bfe4","3d82b1"]]
     var allParts = [("e6194b",true),("e6beff",false),("3cb44b",true),("d2f53c",false),("ffe119",true),("fabebe",false),("0082c8",true),("008080",false),("f58231",true),("aa6e28",false),("911eb4",true),("fffac8",false),("46f0f0",true),("800000",false),("aaffc3",false),("f032e6",true),("ffd8b1",false),("808000",false),("000080",false),("ffffff",false)]
     var currentParts = ["e6194b","3cb44b","ffe119","0082c8","f58231","911eb4","46f0f0","f032e6"]
     let rotationAngles: [CGFloat] = [3.14159,1.5708,0,4.71239,2.35619,0.785398,5.49779,3.92699]

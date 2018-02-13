@@ -11,7 +11,7 @@ import SpriteKit
 class ScoreLabel: SKSpriteNode {
     func initialize(withScore score: String, description: String, fontSize: Int) {
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        self.zPosition = 10
+        self.zPosition = ZPositionService.shared.label
         self.alpha = 0.9
         
         let scoreLabel = createScoreLabel(withScore: score, andFontSize: fontSize)

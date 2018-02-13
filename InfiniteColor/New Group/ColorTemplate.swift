@@ -58,7 +58,7 @@ class ColorTemplate: SKSpriteNode {
     }
     
     func notAvailable() {
-        if index % 3 == 1 { self.color = .red
+        if index % 4 == 3 { self.color = .red
         }else { self.color = UIColor(red: 17/255, green: 17/255, blue: 17/255, alpha: 0.4) }
         createCostLabel()
     }

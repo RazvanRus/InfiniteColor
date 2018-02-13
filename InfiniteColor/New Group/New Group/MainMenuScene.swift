@@ -18,9 +18,8 @@ class MainMenuScene: SKScene {
     }
     
     func initialize() {
-//        GameService.shared.set(bonusPoints: 654)
         OctogonService.shared.getParts()
-        getMode()
+        getGameMode()
         getLabels()
         createPlayButton()
         if GameService.shared.getVibrationStatus() { self.childNode(withName: "VibrationButton")?.alpha = 1 }
@@ -28,9 +27,29 @@ class MainMenuScene: SKScene {
         AudioService.shared.turnDownBackgroundSound()
         }
     
-    func getMode() {
-        GameService.shared.gameMode = .normal
-        OctogonService.shared.currentParts = OctogonService.shared.normalModeParts
+    func getGameMode() {
+        GameService.shared.gameMode = GameService.shared.getGameMode()
+        switch GameService.shared.gameMode {
+        case .easy:
+            if let titleExtension = self.childNode(withName: "TitleLabel")?.childNode(withName: "TitleLabelExtension") as? SKLabelNode {
+                titleExtension.alpha = 1
+                titleExtension.text = "easy"
+                titleExtension.fontSize = 70
+                titleExtension.position = CGPoint(x: 100, y: -115)
+            }
+            OctogonService.shared.currentParts = OctogonService.shared.easyModeParts
+        case .normal:
+            self.childNode(withName: "TitleLabel")?.childNode(withName: "TitleLabelExtension")?.alpha = 0
+            OctogonService.shared.currentParts = OctogonService.shared.normalModeParts
+        case .insane:
+            OctogonService.shared.currentParts = OctogonService.shared.getRandomInsaneParts()
+            if let titleExtension = self.childNode(withName: "TitleLabel")?.childNode(withName: "TitleLabelExtension") as? SKLabelNode {
+                titleExtension.alpha = 1
+                titleExtension.text = "insane"
+                titleExtension.fontSize = 70
+                titleExtension.position = CGPoint(x: 76, y: -116)
+            }
+        }
     }
 
     
@@ -93,6 +112,7 @@ class MainMenuScene: SKScene {
                 notAvailablePanel.animate()
                 self.addChild(notAvailablePanel)
             }
+            if atPoint(location).name == "TitleLabel" { GameService.shared.changeGameMode(); presentMainMenu() }
             if atPoint(location).name == "PlayButton" || atPoint(location).parent?.name == "PlayButton" { presentGameplayScene() }
             if atPoint(location).name == "SkinsButton" { OctogonService.shared.currentParts = OctogonService.shared.normalModeParts; presentSkinsScene() }
             if atPoint(location).name == "VibrationButton" {
@@ -105,6 +125,13 @@ class MainMenuScene: SKScene {
         }
     }
     
+    func presentMainMenu() {
+        if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
+            mainMenuScene.scaleMode = .aspectFill
+            if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .fill }
+            self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0)))
+        }
+    }
     
     func presentGameplayScene() {
         if let gameplayScene = GameplayScene(fileNamed: "GameplayScene") {

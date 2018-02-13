@@ -21,7 +21,7 @@ class NotAvailablePanel: SKSpriteNode {
         self.position = CGPoint(x: 0, y: -200)
         self.color = UIColor(red: 17/255, green: 17/255, blue: 17/255, alpha: 0)
         self.size = CGSize(width: 300, height: 100)
-        self.zPosition = 10
+        self.zPosition = ZPositionService.shared.label
         self.alpha = 1
     }
     

@@ -56,7 +56,7 @@ class GameplayScene: SKScene {
         lastOctogon.name = "Octogon"
         actualOctogon.move(toParent: self)
         lastOctogon.move(toParent: self)
-        createCircle(for: actualOctogon)
+        createCircle(for: actualOctogon.parts.first!)
         circle.scaleUpAnimation()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { self.canTouch = true; self.startOctogons() }
     }
@@ -75,7 +75,7 @@ class GameplayScene: SKScene {
     
     func initializeLabels() {
         scoreLabel = self.childNode(withName: "ScoreLabel") as? SKLabelNode
-        scoreLabel?.zPosition = ZPositionService.shared.score
+        scoreLabel?.zPosition = ZPositionService.shared.label
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -172,23 +172,22 @@ class GameplayScene: SKScene {
         return distance.squareRoot()
     }
     
-    func getClosestPart(for octogon: Octogon) -> String {
-        var closestPart = ""
+    func getClosestPart(for octogon: Octogon) -> Part {
+        var closestPart = Part()
         var distance: CGFloat = 1001
         for part in octogon.parts {
             let forDistance = distanceBetween(circle: circle, and: part)
             if forDistance < distance {
                 distance = forDistance
-                closestPart = part.name ?? ""
+                closestPart = part
             }
         }
         return closestPart
     }
     
-    func canMoveToNextOctogon() -> Bool {
+    func canMove(toClosestPart closestPart: Part) -> Bool {
         let part = lastOctogon.getNextPart()
-        let closestPart = getClosestPart(for: lastOctogon)
-        return part.name == closestPart
+        return part.name == closestPart.name
     }
     
     func moveCircle() {
@@ -196,16 +195,17 @@ class GameplayScene: SKScene {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2*CircleService.shared.animationDuration) { self.canTouch = true }
         if scoreMultiplier > GameService.shared.getHighestCombo() { GameService.shared.set(highestCombo: scoreMultiplier) }
         if scoreMultiplier > highestCombo { highestCombo = scoreMultiplier }
-        if canMoveToNextOctogon() {
+        let closestPart = getClosestPart(for: lastOctogon)
+        if canMove(toClosestPart: closestPart) {
             if lastOctogon.radiansRotation <= CGFloat(3.8) {
                 AudioService.shared.playSoundEffect("perfect")
-                perfectMove()
+                perfectMove(forPart: closestPart)
             }else {
                 AudioService.shared.playSoundEffect("tap")
                 incrementScore(by: 1)
                 scoreMultiplier = 1
             }
-            moveAnimation()
+            moveAnimation(toClosestPart: closestPart)
             OctogonService.shared.increaseSpinningAngle()
         } else {
             // end game situation
@@ -215,7 +215,7 @@ class GameplayScene: SKScene {
         }
     }
     
-    func moveAnimation() {
+    func moveAnimation(toClosestPart part: Part) {
         createNextOctogon()
         actualOctogon.colorize()
         slowOctogons()
@@ -225,18 +225,17 @@ class GameplayScene: SKScene {
         circle.scaleDownAnimation()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + CircleService.shared.animationDuration, execute: {
             CircleService.shared.moveToNextPart()
-            self.createCircle(for: self.actualOctogon)
+            self.createCircle(for: part)
             self.circle.scaleUpAnimation()
         })
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + CircleService.shared.animationDuration*2) { self.lastOctogon.increaseRadiansRotation() }
     }
     
-    func perfectMove() {
+    func perfectMove(forPart part: Part) {
         scoreMultiplier += 1
 
         let perfectMoveLabel = PerfectMoveLabel()
         perfectMoveLabel.initialize(withText: "x\(scoreMultiplier)")
-        let part = lastOctogon.getNextPart()
         perfectMoveLabel.setSize(part.size.height*0.8)
         part.addChild(perfectMoveLabel)
         part.perfectMoveAnimation()
@@ -283,7 +282,7 @@ extension GameplayScene {
         lastOctogon = secoundOctogon
         actualOctogon.instantColorize()
 
-        createCircle(for: actualOctogon)
+        createCircle(for: actualOctogon.parts.first!)
     }
     
     @objc
@@ -300,7 +299,7 @@ extension GameplayScene {
             octogons.append(lastOctogon)
             self.addChild(lastOctogon)
         }
-        createCircle(for: actualOctogon)
+        createCircle(for: actualOctogon.parts.first!)
     }
     
     func createOctogonForRevive(withSize size: CGSize) -> Octogon {
@@ -339,14 +338,14 @@ extension GameplayScene {
         lastOctogon.increaseRadiansRotation()
     }
     
-    func createCircle(for octogon: Octogon) {
+    func createCircle(for part: Part) {
         circle = Circle()
         circle.initialize()
         
+        guard let octogon = part.parent as? Octogon else { return }
         let size = octogon.initialSize
         circle.setSize(CGSize(width: size/9, height: size/9))
         
-        let part = octogon.getCurrentPart()
         part.addChild(circle)
     }
 }
