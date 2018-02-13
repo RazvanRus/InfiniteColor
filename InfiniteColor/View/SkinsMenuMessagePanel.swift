@@ -1,37 +1,37 @@
 //
-//  NotEnoughPointsLabel.swift
+//  SkinsMenuMessagePanel.swift
 //  InfiniteColor
 //
-//  Created by Rus Razvan on 12/02/2018.
+//  Created by Rus Razvan on 13/02/2018.
 //  Copyright © 2018 Rus Razvan. All rights reserved.
 //
 
 import SpriteKit
 
-class NotEnoughPointsLabel: SKSpriteNode {
-    func initialize() {
+class SkinsMenuMessagePanel: SKSpriteNode {
+    func initialize(withText text: String) {
         createPanel()
-        let text = createText()
-        self.addChild(text)
+        let textLabel = createText(withText: text)
+        self.addChild(textLabel)
     }
     
     func createPanel() {
         self.name = "NotEnoughPointsPanel"
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        self.position = CGPoint(x: 0, y: -195)
+        self.position = CGPoint(x: 0, y: -20)
         self.color = UIColor(red: 17/255, green: 17/255, blue: 17/255, alpha: 0)
         self.size = CGSize(width: 300, height: 100)
         self.zPosition = 10
         self.alpha = 1
     }
     
-    func createText() -> SKLabelNode{
+    func createText(withText text: String) -> SKLabelNode{
         let textLabel = SKLabelNode()
         textLabel.name = "NEPPTextLabel"
         textLabel.position = CGPoint(x: 0, y: 0)
-        textLabel.text = "Not enough points"
+        textLabel.text = text
         textLabel.fontName = "AvenirNext-Medium"
-        textLabel.fontSize = 70
+        textLabel.fontSize = 60
         textLabel.fontColor = SKColor.white
         textLabel.horizontalAlignmentMode = .center
         textLabel.verticalAlignmentMode = .center

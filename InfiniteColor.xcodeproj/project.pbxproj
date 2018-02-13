@@ -40,7 +40,7 @@
 		29596A40201CB1F000F2839B /* PerfectMoveLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29596A3F201CB1F000F2839B /* PerfectMoveLabel.swift */; };
 		2986A9672016326200B69778 /* OctogonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2986A9662016326200B69778 /* OctogonService.swift */; };
 		2986A96B2016392200B69778 /* CircleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2986A96A2016392200B69778 /* CircleService.swift */; };
-		29C218C92031FBBA00696FF0 /* NotEnoughPointsLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C218C82031FBBA00696FF0 /* NotEnoughPointsLabel.swift */; };
+		29A804C12032FA6B00D6FA56 /* SkinsMenuMessagePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A804C02032FA6B00D6FA56 /* SkinsMenuMessagePanel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,7 +79,7 @@
 		29596A3F201CB1F000F2839B /* PerfectMoveLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfectMoveLabel.swift; sourceTree = "<group>"; };
 		2986A9662016326200B69778 /* OctogonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctogonService.swift; sourceTree = "<group>"; };
 		2986A96A2016392200B69778 /* CircleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleService.swift; sourceTree = "<group>"; };
-		29C218C82031FBBA00696FF0 /* NotEnoughPointsLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotEnoughPointsLabel.swift; sourceTree = "<group>"; };
+		29A804C02032FA6B00D6FA56 /* SkinsMenuMessagePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinsMenuMessagePanel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,7 +170,7 @@
 				290ACDA9202CAE3E0068929A /* ScoreLabel.swift */,
 				295594242031A61C00B677E0 /* ResumePanel.swift */,
 				295594262031AAF000B677E0 /* NotAvailablePanel.swift */,
-				29C218C82031FBBA00696FF0 /* NotEnoughPointsLabel.swift */,
+				29A804C02032FA6B00D6FA56 /* SkinsMenuMessagePanel.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -296,7 +296,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				29C218C92031FBBA00696FF0 /* NotEnoughPointsLabel.swift in Sources */,
+				29A804C12032FA6B00D6FA56 /* SkinsMenuMessagePanel.swift in Sources */,
 				2955942320319F7D00B677E0 /* ReviveOctogon.swift in Sources */,
 				2902077C201F8B1B000D58E8 /* AudioService.swift in Sources */,
 				2986A9672016326200B69778 /* OctogonService.swift in Sources */,

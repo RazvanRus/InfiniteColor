@@ -43,13 +43,14 @@ class MainMenuScene: SKScene {
     func getHighscore() {
         let highscoreLabel = ScoreLabel()
         highscoreLabel.initialize(withScore: "\(GameService.shared.getHighscore())", description: "Highscore", fontSize: 70)
-        highscoreLabel.set(position: CGPoint(x: 0, y: 200))
+        highscoreLabel.set(position: CGPoint(x: 0, y: 215))
         self.addChild(highscoreLabel)
+        highscoreLabel.setScale(1.2)
     }
     
     func getBonusPoints() {
         let bonusPointsLabel = ScoreLabel()
-        bonusPointsLabel.initialize(withScore: "\(GameService.shared.getBonusPoints())", description: "Bonus", fontSize: 50)
+        bonusPointsLabel.initialize(withScore: "\(GameService.shared.getBonusPoints())", description: "Bonus", fontSize: 48)
         bonusPointsLabel.set(position: CGPoint(x: -250, y: 0))
         bonusPointsLabel.createExtraDescriptionLabel(withText: "Points")
         self.addChild(bonusPointsLabel)
@@ -117,7 +118,7 @@ class MainMenuScene: SKScene {
     
     func presentSkinsScene() {
         if let skinsScene = SkinsScene(fileNamed: "SkinsScene") {
-            if IphoneTypeService.shared.isIphoneX() { skinsScene.scaleMode = .fill }
+            if IphoneTypeService.shared.isIphoneX() { skinsScene.scaleMode = .fill     }
             else { skinsScene.scaleMode = .aspectFill }
             self.view?.presentScene(skinsScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }

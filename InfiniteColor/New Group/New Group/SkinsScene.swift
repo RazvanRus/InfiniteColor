@@ -29,19 +29,46 @@ class SkinsScene: SKScene {
     }
     
     func initialize() {
-        getBonusPoints()
+        createLabels()
         createOctogon()
         createSkinColors()
+    }
+    
+    func createLabels() {
+        getBonusPoints()
+//        getAvailableSkinsNumber()
+//        getUnavailableSkinsNumber()
     }
     
     func getBonusPoints() {
         self.childNode(withName: "BonusPointsLabel")?.removeFromParent()
         let bonusPointsLabel = ScoreLabel()
         bonusPointsLabel.name = "BonusPointsLabel"
-        bonusPointsLabel.initialize(withScore: "\(GameService.shared.getBonusPoints())", description: "Bonus", fontSize: 50)
-        bonusPointsLabel.set(position: CGPoint(x: -280, y: 580))
+        bonusPointsLabel.initialize(withScore: "\(GameService.shared.getBonusPoints())", description: "Bonus", fontSize: 48)
+        bonusPointsLabel.set(position: CGPoint(x: 0, y: 220))
         bonusPointsLabel.createExtraDescriptionLabel(withText: "Points")
         self.addChild(bonusPointsLabel)
+        bonusPointsLabel.setScale(1.35)
+    }
+    
+    func getAvailableSkinsNumber() {
+        self.childNode(withName: "AvailableSkinsLabel")?.removeFromParent()
+        let availableSkinsLabel = ScoreLabel()
+        availableSkinsLabel.name = "AvailableSkinsLabel"
+        availableSkinsLabel.initialize(withScore: "\(OctogonService.shared.getAvailableSkinsNumber())", description: "Bought", fontSize: 50)
+        availableSkinsLabel.set(position: CGPoint(x: -275, y: 220))
+        availableSkinsLabel.createExtraDescriptionLabel(withText: "Skins")
+        self.addChild(availableSkinsLabel)
+    }
+    
+    func getUnavailableSkinsNumber() {
+        self.childNode(withName: "UnavailableSkinsLabel")?.removeFromParent()
+        let unavailableSkinsLabel = ScoreLabel()
+        unavailableSkinsLabel.name = "UnavailableSkinsLabel"
+        unavailableSkinsLabel.initialize(withScore: "\(OctogonService.shared.getUnavailableSkinsNumber())", description: "Remaining", fontSize: 50)
+        unavailableSkinsLabel.set(position: CGPoint(x: 275, y: 220))
+        unavailableSkinsLabel.createExtraDescriptionLabel(withText: "Skins")
+        self.addChild(unavailableSkinsLabel)
     }
     
     func createSkinColors() {
@@ -62,8 +89,8 @@ class SkinsScene: SKScene {
     
     func createOctogon() {
         let octogon = Octogon()
-        octogon.setPosition(CGPoint(x: 0, y: 350))
-        let size = CGSize(width: 375, height: 375)
+        octogon.setPosition(CGPoint(x: 0, y: 220))
+        let size = CGSize(width: 325, height: 325)
         octogon.setSize(size)
         octogon.initialize(spinningFactor: 1)
         self.addChild(octogon)
@@ -77,7 +104,7 @@ class SkinsScene: SKScene {
             if atPoint(location).name == "CancelButton" { presentMainMenu() }
             if let octogonPart = atPoint(location) as? Part { changeSelectedPart(with: octogonPart) }
             if let colorTemplate = atPoint(location) as? ColorTemplate { colorTapped(colorTemplate) }
-            if let colorTemplate = atPoint(location).parent as? ColorTemplate { colorTapped(colorTemplate) }
+            else{ if let colorTemplate = atPoint(location).parent as? ColorTemplate { colorTapped(colorTemplate) } }
         }
     }
     
@@ -96,7 +123,11 @@ class SkinsScene: SKScene {
     func changeColor(with color: ColorTemplate) {
         if let colorName = color.name {
             if OctogonService.shared.normalModeParts.contains(colorName) {
-                // message that color selected is already used !
+                self.childNode(withName: "NotEnoughPointsPanel")?.removeFromParent()
+                let alreadyUsedPannel = SkinsMenuMessagePanel()
+                alreadyUsedPannel.initialize(withText: "Skin already in use")
+                alreadyUsedPannel.animate()
+                self.addChild(alreadyUsedPannel)
             }else {
                 OctogonService.shared.substitute(currentPart: selectedPart, with: colorName)
                 OctogonService.shared.saveParts()
@@ -113,8 +144,9 @@ class SkinsScene: SKScene {
             GameService.shared.set(bonusPoints: GameService.shared.getBonusPoints() - colorTemplate.cost)
             getBonusPoints()
         } else {
-            let notEnoughPointsPanel = NotEnoughPointsLabel()
-            notEnoughPointsPanel.initialize()
+            self.childNode(withName: "NotEnoughPointsPanel")?.removeFromParent()
+            let notEnoughPointsPanel = SkinsMenuMessagePanel()
+            notEnoughPointsPanel.initialize(withText: "Not enough points")
             notEnoughPointsPanel.animate()
             self.addChild(notEnoughPointsPanel)
         }
@@ -123,6 +155,7 @@ class SkinsScene: SKScene {
     func presentMainMenu() {
         if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
             mainMenuScene.scaleMode = .aspectFill
+            if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .fill }
             self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }
     }

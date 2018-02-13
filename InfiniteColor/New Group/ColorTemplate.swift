@@ -24,7 +24,7 @@ class ColorTemplate: SKSpriteNode {
         let part = OctogonService.shared.allParts[index]
 
         self.name = part.0
-        self.size = CGSize(width: 150, height: 110)
+        self.size = CGSize(width: 130, height: 100)
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.zPosition = ZPositionService.shared.part
         setPosition(forIndex: index)
@@ -35,8 +35,8 @@ class ColorTemplate: SKSpriteNode {
     }
     
     func setPosition(forIndex index: Int) {
-        let xPosition = -270 + Double(180 * (index % 4))
-        let yPosition =  25.0 - (130 * Double(index / 4))
+        let xPosition = -300 + Double(150 * (index % 5))
+        let yPosition =  -120 - (125 * Double(index / 5))
         self.position = CGPoint(x: xPosition, y: yPosition)
     }
     
@@ -67,7 +67,7 @@ class ColorTemplate: SKSpriteNode {
         let costLabel = SKLabelNode()
         costLabel.name = self.name
         costLabel.text = "\(cost)"
-        costLabel.fontSize = 35
+        costLabel.fontSize = 40
         costLabel.fontName = "AvenirNext-DemiBold"
         costLabel.fontColor = .white
         costLabel.verticalAlignmentMode = .bottom
@@ -77,7 +77,7 @@ class ColorTemplate: SKSpriteNode {
         let descriptionLabel = SKLabelNode()
         descriptionLabel.name = self.name
         descriptionLabel.text = "Points"
-        descriptionLabel.fontSize = 23
+        descriptionLabel.fontSize = 25
         descriptionLabel.fontName = "AvenirNext-Regular"
         descriptionLabel.fontColor = .white
         descriptionLabel.verticalAlignmentMode = .top

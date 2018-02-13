@@ -82,6 +82,7 @@ class Part: SKSpriteNode {
         border.zPosition = self.zPosition + 1
         border.size = CGSize(width: self.size.width*1.05, height: self.size.height*1.1)
         self.addChild(border)
+        self.setScale(1.05)
     }
-    func isNotSelected() { self.childNode(withName: "Border")?.removeFromParent() }
+    func isNotSelected() { self.childNode(withName: "Border")?.removeFromParent(); self.setScale(1) }
 }

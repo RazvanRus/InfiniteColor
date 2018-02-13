@@ -69,6 +69,18 @@ class OctogonService {
     
     func getRandomInsaneParts() -> [String] { return insaneModeParts[Int(arc4random_uniform(UInt32(insaneModeParts.count)))]}
     
+    func getAvailableSkinsNumber() -> Int {
+        var number = 0
+        for skin in allParts { if skin.1 { number += 1 } }
+        return number
+    }
+    
+    func getUnavailableSkinsNumber() -> Int {
+        var number = 0
+        for skin in allParts { if !skin.1 { number += 1 } }
+        return number
+    }
+    
     func getParts() {
         normalModeParts = getNormalModeParts()
         allParts = getAllParts()

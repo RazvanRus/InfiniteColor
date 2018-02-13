@@ -396,6 +396,7 @@ extension GameplayScene {
     func presentMainMenu() {
         if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
             mainMenuScene.scaleMode = .aspectFill
+            if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .fill }
             self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }
     }
