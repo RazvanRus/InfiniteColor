@@ -11,6 +11,9 @@ import AudioToolbox
 
 
 class MainMenuScene: SKScene {
+    // adds delegate
+    var appodealAdsDelegate: AppodealAdsDelegate!
+    
     var octogons: [Octogon] = []
     var informationDisplayed = false
     
@@ -161,16 +164,19 @@ class MainMenuScene: SKScene {
         if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
             mainMenuScene.scaleMode = .aspectFill
             if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .aspectFill }
+            mainMenuScene.appodealAdsDelegate = appodealAdsDelegate
             self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0)))
         }
     }
     
     func presentGameplayScene() {
+        ReviveGameService.shared.canPlayerBeRevived = true
         if let gameplayScene = GameplayScene(fileNamed: "GameplayScene") {
             if IphoneTypeService.shared.isIphoneX() { gameplayScene.scaleMode = .aspectFill }
             else { gameplayScene.scaleMode = .aspectFill }
             if let actualOct = octogons.first {  gameplayScene.actualOctogon = actualOct }
             if let lastOct = octogons.last { gameplayScene.lastOctogon = lastOct }
+            gameplayScene.appodealAdsDelegate = appodealAdsDelegate
             self.view?.presentScene(gameplayScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0)))
         }
     }
@@ -179,6 +185,7 @@ class MainMenuScene: SKScene {
         if let skinsScene = SkinsScene(fileNamed: "SkinsScene") {
             if IphoneTypeService.shared.isIphoneX() { skinsScene.scaleMode = .aspectFill     }
             else { skinsScene.scaleMode = .aspectFill }
+            skinsScene.appodealAdsDelegate = appodealAdsDelegate
             self.view?.presentScene(skinsScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }
     }

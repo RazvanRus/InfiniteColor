@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import Appodeal
 
 class EndGamePannel: SKSpriteNode {
     func initialize(withScore score: Int, andCombo combo: Int) {
@@ -15,7 +16,7 @@ class EndGamePannel: SKSpriteNode {
         createScoreLabel(withScore: score)
         createComboLabel(withCombo: combo)
         createQuitButton()
-        if ReviveGameService.shared.canPlayerBeRevived { createReviveButton() }
+        if ReviveGameService.shared.canPlayerBeRevived && Appodeal.isReadyForShow(with: .rewardedVideo) { createReviveButton() }
     }
     
     func createEndGamePannel() {

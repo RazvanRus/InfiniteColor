@@ -7,9 +7,14 @@
 //
 
 import SpriteKit
+import GameplayKit
 import AudioToolbox
+import Appodeal
 
 class GameplayScene: SKScene {
+    // adds delegate
+    var appodealAdsDelegate: AppodealAdsDelegate!
+    
     // MARK: variables
     var spinningFactor: CGFloat = 1
     var scoreMultiplier = 1
@@ -28,7 +33,7 @@ class GameplayScene: SKScene {
     // MARK: functions
     override func didMove(to view: SKView) {
         resetServices()
-
+        
         initializeDelegateNotifications()
         initializeLabels()
         if ReviveGameService.shared.isPlayerRevived { initializeForRevivePlayer() } else { initialize() }
@@ -41,7 +46,6 @@ class GameplayScene: SKScene {
     }
     
     func initialize() {
-        ReviveGameService.shared.canPlayerBeRevived = true
         CircleService.shared.moveToNextPart()
         
         if lastOctogon.name == "PlayButton" && actualOctogon.name == "PlayButton" {
@@ -62,7 +66,6 @@ class GameplayScene: SKScene {
     }
     
     func initializeForRevivePlayer() {
-        ReviveGameService.shared.canPlayerBeRevived = false
         ReviveGameService.shared.isPlayerRevived = false
         spinningFactor = ReviveGameService.shared.spinningFactor
         if ReviveGameService.shared.octogonsSize.count % 2 == 1 { spinningFactor *= -1 }
@@ -90,12 +93,12 @@ class GameplayScene: SKScene {
         if canMoveToMainMenu {
             for touch in touches {
                 let location = touch.location(in: self)
-                if atPoint(location).name == "EGPReviveButton" {
+                if atPoint(location).name == "EGPReviveButton" && ReviveGameService.shared.canPlayerBeRevived {
                     if let scoreText = scoreLabel?.text, let score = Int(scoreText) {
                         prepareForRevive(withScore: score)
-                        presentGameplayScene()
+                        presentReviveVideoAd()
                     }
-                }else { presentMainMenu() }
+                }else { tryToPresentInterstitial() }
             }
         }else {
             if canTouch {
@@ -125,7 +128,7 @@ class GameplayScene: SKScene {
             index += 1
         }
     }
-
+    
     func adjustScaleValue() { OctogonService.shared.scaleValue = 1 + (70/actualOctogon.size.height) }
     
     func adjustScoreSize() {
@@ -236,7 +239,7 @@ class GameplayScene: SKScene {
     
     func perfectMove(forPart part: Part) {
         if scoreMultiplier < 100 { scoreMultiplier += 1 }
-
+        
         let perfectMoveLabel = PerfectMoveLabel()
         perfectMoveLabel.initialize(withText: "x\(scoreMultiplier)")
         perfectMoveLabel.setSize(part.size.height*0.8)
@@ -284,7 +287,7 @@ extension GameplayScene {
         actualOctogon = octogon
         lastOctogon = secoundOctogon
         actualOctogon.instantColorize()
-
+        
         createCircle(for: actualOctogon.parts.first!)
     }
     
@@ -334,7 +337,7 @@ extension GameplayScene {
         let octogon = createOctogon(withSize: size)
         self.addChild(octogon)
         octogons.append(octogon)
-
+        
         lastOctogon.stopIncreasing()
         actualOctogon = lastOctogon
         lastOctogon = octogon
@@ -370,7 +373,6 @@ extension GameplayScene {
     }
     
     func prepareForRevive(withScore score: Int) {
-        ReviveGameService.shared.isPlayerRevived = true
         ReviveGameService.shared.score = score
         ReviveGameService.shared.highestCombo = highestCombo
         ReviveGameService.shared.spinningFactor = spinningFactor
@@ -392,13 +394,14 @@ extension GameplayScene {
         let endGamePannel = EndGamePannel()
         endGamePannel.initialize(withScore: score, andCombo: highestCombo)
         self.addChild(endGamePannel)
-//        scoreLabel?.removeFromParent()
+        //        scoreLabel?.removeFromParent()
     }
     
     func presentMainMenu() {
         if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
             mainMenuScene.scaleMode = .aspectFill
             if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .aspectFill }
+            mainMenuScene.appodealAdsDelegate = appodealAdsDelegate
             self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }
     }
@@ -407,6 +410,7 @@ extension GameplayScene {
         if let gameplayScene = GameplayScene(fileNamed: "GameplayScene") {
             if IphoneTypeService.shared.isIphoneX() { gameplayScene.scaleMode = .aspectFill }
             else { gameplayScene.scaleMode = .aspectFill }
+            gameplayScene.appodealAdsDelegate = appodealAdsDelegate
             self.view?.presentScene(gameplayScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.25)))
         }
     }
@@ -457,5 +461,39 @@ extension GameplayScene {
     }
 }
 
+
+
+// MARK: extension for appodeal ads management
+extension GameplayScene {
+    func presentReviveVideoAd() {
+        if ReviveGameService.shared.canPlayerBeRevived {
+            if (Appodeal.isReadyForShow(with: .rewardedVideo)) {
+                appodealAdsDelegate.presentRewardedVideo()
+            }
+        }
+    }
+    
+    func tryToPresentInterstitial() {
+        let randomSourceArc = GKARC4RandomSource()
+        let randomNumber = randomSourceArc.nextInt(upperBound: 3)
+        if randomNumber == 1 {
+            if (Appodeal.isReadyForShow(with: .interstitial)) {
+                appodealAdsDelegate.presentInterstitial()
+            }else {
+                presentMainMenu()
+            }
+        }else {
+            presentMainMenu()
+        }
+    }
+}
+
+
+
+// MARK: appodeal ads delegate protocol
+protocol AppodealAdsDelegate {
+    func presentInterstitial()
+    func presentRewardedVideo()
+}
 
 

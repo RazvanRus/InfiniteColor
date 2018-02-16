@@ -22,6 +22,9 @@
 import SpriteKit
 
 class SkinsScene: SKScene {
+    // adds delegate
+    var appodealAdsDelegate: AppodealAdsDelegate!
+    
     var selectedPart = Part()
     var informationDisplayed = false
     
@@ -183,6 +186,7 @@ class SkinsScene: SKScene {
         if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
             mainMenuScene.scaleMode = .aspectFill
             if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .aspectFill }
+            mainMenuScene.appodealAdsDelegate = appodealAdsDelegate
             self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }
     }
@@ -191,6 +195,7 @@ class SkinsScene: SKScene {
         if let skinsScene = SkinsScene(fileNamed: "SkinsScene") {
             if IphoneTypeService.shared.isIphoneX() { skinsScene.scaleMode = .aspectFill     }
             else { skinsScene.scaleMode = .aspectFill }
+            skinsScene.appodealAdsDelegate = appodealAdsDelegate
             self.view?.presentScene(skinsScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }
     }

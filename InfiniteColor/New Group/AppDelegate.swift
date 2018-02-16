@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Appodeal
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        if !UserDefaults.standard.bool(forKey: "RusRazvan.InfiniteColor.noAds") {
+            Appodeal.initialize(withApiKey: "e418432912f95d959c367c8093e3aec7122f63d738c35968", types: [.banner, .interstitial, .rewardedVideo])
+        } else {
+            Appodeal.initialize(withApiKey: "e418432912f95d959c367c8093e3aec7122f63d738c35968", types: [.rewardedVideo])
+        }
+        
         return true
     }
 
