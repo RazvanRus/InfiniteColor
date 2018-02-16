@@ -23,9 +23,12 @@ import SpriteKit
 
 class SkinsScene: SKScene {
     var selectedPart = Part()
+    var informationDisplayed = false
     
     override func didMove(to view: SKView) {
+        if IphoneTypeService.shared.isIphoneX() { initializeForIPhoneX() }
         initialize()
+        initializeDelegateNotifications()
     }
     
     func initialize() {
@@ -99,9 +102,11 @@ class SkinsScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if informationDisplayed { presentSkinsScene() }
         for touch in touches {
             let location = touch.location(in: self)
             if atPoint(location).name == "ExitButton" { presentMainMenu() }
+            if atPoint(location).name == "InformationButton" { presentInformation() }
             if let octogonPart = atPoint(location) as? Part { changeSelectedPart(with: octogonPart) }
             if let colorTemplate = atPoint(location) as? ColorTemplate { colorTapped(colorTemplate) }
             else{ if let colorTemplate = atPoint(location).parent as? ColorTemplate { colorTapped(colorTemplate) } }
@@ -152,12 +157,80 @@ class SkinsScene: SKScene {
         }
     }
     
+    func presentInformation() {
+        informationDisplayed = true
+        let information = SKSpriteNode(imageNamed: "InformationSkinsScene")
+        information.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        if IphoneTypeService.shared.isIphoneX() { adjustInformationForIPhoneX(information)
+        }else {
+            information.size = CGSize(width: 760, height: 1340)
+            information.position = CGPoint(x: 0, y: 0)
+        }
+        information.zPosition = ZPositionService.shared.anything
+        self.addChild(information)
+        
+        let change1 = SKAction.run { information.texture = SKTexture(imageNamed: "InformationSkinsScene2") }
+        let change2 = SKAction.run { information.texture = SKTexture(imageNamed: "InformationSkinsScene") }
+        let wait = SKAction.wait(forDuration: 1)
+        
+        let sequence = SKAction.sequence([wait,change1,wait,change2])
+        let repeatAction = SKAction.repeatForever(sequence)
+
+        information.run(repeatAction)
+    }
+    
     func presentMainMenu() {
         if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
             mainMenuScene.scaleMode = .aspectFill
-            if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .fill }
+            if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .aspectFill }
             self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }
+    }
+    
+    func presentSkinsScene() {
+        if let skinsScene = SkinsScene(fileNamed: "SkinsScene") {
+            if IphoneTypeService.shared.isIphoneX() { skinsScene.scaleMode = .aspectFill     }
+            else { skinsScene.scaleMode = .aspectFill }
+            self.view?.presentScene(skinsScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
+        }
+    }
+}
+
+
+
+// MARK: extension for delegate notifications (app state) !!!
+extension SkinsScene {
+    func initializeDelegateNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(GameplayScene.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(GameplayScene.appWillResignActive), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+    }
+    
+    @objc
+    func appDidBecomeActive() { AudioService.shared.resumeBackgroundSound() }
+    @objc
+    func appWillResignActive() { AudioService.shared.pauseBackgrounSound() }
+}
+
+
+
+// MARK: extension for iPhoneX
+extension SkinsScene {
+    func initializeForIPhoneX() {
+        setColorTemplateVariables()
+        self.childNode(withName: "InformationButton")?.position.x = 235
+        self.childNode(withName: "ExitButton")?.position.x = -240
+        self.childNode(withName: "TitleLabel")?.position.y = 560
+    }
+    
+    func adjustInformationForIPhoneX(_ information: SKSpriteNode) {
+        information.size = CGSize(width: 700, height: 1334)
+        information.position = CGPoint(x: -20, y: 0)
+    }
+    
+    func setColorTemplateVariables() {
+        IphoneTypeService.shared.iPhoneXColorTemplateWidth = 30
+        IphoneTypeService.shared.iPhoneXColorTemplateDistanceBetween = 30
+        IphoneTypeService.shared.iPhoneXColorTemplateStartingXPosition = -60.0
     }
 }
 

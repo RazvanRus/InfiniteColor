@@ -156,18 +156,6 @@ class EndGamePannel: SKSpriteNode {
         
         reviveHolder.addChild(reviveButtonPart1)
         self.addChild(reviveHolder)
-        
-//        let reviveButtonPart2 = SKLabelNode()
-//        reviveButtonPart2.name = "EGPReviveButton"
-//        reviveButtonPart2.position = CGPoint(x: 0, y: -70)
-//        reviveButtonPart2.text = "revive"
-//
-//        reviveButtonPart2.fontName = "AvenirNext-Regular"
-//        reviveButtonPart2.fontSize = 90
-//        reviveButtonPart2.fontColor = SKColor.white
-//        reviveButtonPart2.alpha = 1
-//
-//        reviveButtonPart1.addChild(reviveButtonPart2)
     }
     
     func createComboLabel(withCombo combo: Int) {

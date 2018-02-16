@@ -20,4 +20,8 @@ class IphoneTypeService {
         }
         return false
     }
+    
+    var iPhoneXColorTemplateWidth = 0
+    var iPhoneXColorTemplateDistanceBetween = 0
+    var iPhoneXColorTemplateStartingXPosition = 0.0
 }

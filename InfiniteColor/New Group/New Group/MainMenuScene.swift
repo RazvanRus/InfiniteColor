@@ -12,9 +12,12 @@ import AudioToolbox
 
 class MainMenuScene: SKScene {
     var octogons: [Octogon] = []
+    var informationDisplayed = false
     
     override func didMove(to view: SKView) {
         initialize()
+        initializeDelegateNotifications()
+        if IphoneTypeService.shared.isIphoneX() { initializeForIPhoneX() }
     }
     
     func initialize() {
@@ -31,6 +34,7 @@ class MainMenuScene: SKScene {
         GameService.shared.gameMode = GameService.shared.getGameMode()
         switch GameService.shared.gameMode {
         case .easy:
+            if let gameModeButton = self.childNode(withName: "GameModeButton") as? SKSpriteNode { gameModeButton.texture = SKTexture(imageNamed: "EasyButton") }
             if let titleExtension = self.childNode(withName: "TitleLabel")?.childNode(withName: "TitleLabelExtension") as? SKLabelNode {
                 titleExtension.alpha = 1
                 titleExtension.text = "easy"
@@ -39,9 +43,11 @@ class MainMenuScene: SKScene {
             }
             OctogonService.shared.currentParts = OctogonService.shared.easyModeParts
         case .normal:
+            if let gameModeButton = self.childNode(withName: "GameModeButton") as? SKSpriteNode { gameModeButton.texture = SKTexture(imageNamed: "NormalButton")}
             self.childNode(withName: "TitleLabel")?.childNode(withName: "TitleLabelExtension")?.alpha = 0
             OctogonService.shared.currentParts = OctogonService.shared.normalModeParts
         case .insane:
+            if let gameModeButton = self.childNode(withName: "GameModeButton") as? SKSpriteNode { gameModeButton.texture = SKTexture(imageNamed: "InsaneButton")}
             OctogonService.shared.currentParts = OctogonService.shared.getRandomInsaneParts()
             if let titleExtension = self.childNode(withName: "TitleLabel")?.childNode(withName: "TitleLabelExtension") as? SKLabelNode {
                 titleExtension.alpha = 1
@@ -69,6 +75,7 @@ class MainMenuScene: SKScene {
     
     func getBonusPoints() {
         let bonusPointsLabel = ScoreLabel()
+        bonusPointsLabel.name = "BonusPointsLabel"
         bonusPointsLabel.initialize(withScore: "\(GameService.shared.getBonusPoints())", description: "Bonus", fontSize: 48)
         bonusPointsLabel.set(position: CGPoint(x: -250, y: 0))
         bonusPointsLabel.createExtraDescriptionLabel(withText: "Points")
@@ -77,6 +84,7 @@ class MainMenuScene: SKScene {
     
     func getHighestCombo() {
         let highestComboLabel = ScoreLabel()
+        highestComboLabel.name = "HighestComboLabel"
         highestComboLabel.initialize(withScore: "x\(GameService.shared.getHighestCombo())", description: "Highest", fontSize: 50)
         highestComboLabel.set(position: CGPoint(x: 260, y: 0))
         highestComboLabel.createExtraDescriptionLabel(withText: "Combo")
@@ -103,15 +111,17 @@ class MainMenuScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if informationDisplayed { presentMainMenu() }
         for touch in touches {
             let location = touch.location(in: self)
-            if atPoint(location).name == "NoAdsButton" || atPoint(location).name == "InformationButton" {
+            if atPoint(location).name == "NoAdsButton" {
                 self.childNode(withName: "NotAvailablePanel")?.removeFromParent()
                 let notAvailablePanel = NotAvailablePanel()
                 notAvailablePanel.initialize()
                 notAvailablePanel.animate()
                 self.addChild(notAvailablePanel)
             }
+            if atPoint(location).name == "InformationButton" { presentInformation() }
             if atPoint(location).name == "TitleLabel" { GameService.shared.changeGameMode(); presentMainMenu() }
             if atPoint(location).name == "PlayButton" || atPoint(location).parent?.name == "PlayButton" { presentGameplayScene() }
             if atPoint(location).name == "SkinsButton" { OctogonService.shared.currentParts = OctogonService.shared.normalModeParts; presentSkinsScene() }
@@ -125,10 +135,32 @@ class MainMenuScene: SKScene {
         }
     }
     
+    func presentInformation() {
+        informationDisplayed = true
+        let information = SKSpriteNode(imageNamed: "InformationMainMenuScene")
+        information.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        if IphoneTypeService.shared.isIphoneX() { adjustInformationForIPhoneX(information)
+        }else {
+            information.size = CGSize(width: 760, height: 1340)
+            information.position = CGPoint(x: 0, y: 0)
+        }
+        information.zPosition = ZPositionService.shared.anything
+        self.addChild(information)
+        
+        let change1 = SKAction.run { information.texture = SKTexture(imageNamed: "InformationMainMenuScene2") }
+        let change2 = SKAction.run { information.texture = SKTexture(imageNamed: "InformationMainMenuScene") }
+        let wait = SKAction.wait(forDuration: 1)
+        
+        let sequence = SKAction.sequence([wait,change1,wait,change2])
+        let repeatAction = SKAction.repeatForever(sequence)
+        
+        information.run(repeatAction)
+    }
+    
     func presentMainMenu() {
         if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
             mainMenuScene.scaleMode = .aspectFill
-            if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .fill }
+            if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .aspectFill }
             self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0)))
         }
     }
@@ -145,10 +177,41 @@ class MainMenuScene: SKScene {
     
     func presentSkinsScene() {
         if let skinsScene = SkinsScene(fileNamed: "SkinsScene") {
-            if IphoneTypeService.shared.isIphoneX() { skinsScene.scaleMode = .fill     }
+            if IphoneTypeService.shared.isIphoneX() { skinsScene.scaleMode = .aspectFill     }
             else { skinsScene.scaleMode = .aspectFill }
             self.view?.presentScene(skinsScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }
+    }
+}
+
+
+
+
+// MARK: extension for delegate notifications (app state) !!!
+extension MainMenuScene {
+    func initializeDelegateNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(GameplayScene.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(GameplayScene.appWillResignActive), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+    }
+    
+    @objc
+    func appDidBecomeActive() { AudioService.shared.resumeBackgroundSound() }
+    @objc
+    func appWillResignActive() { AudioService.shared.pauseBackgrounSound() }
+}
+
+
+// MARK: extension for iPhoneX
+extension MainMenuScene {
+    func initializeForIPhoneX() {
+        self.childNode(withName: "InformationButton")?.position.x = 235
+        self.childNode(withName: "BonusPointsLabel")?.position.x = -220
+        self.childNode(withName: "HighestComboLabel")?.position.x = 230
+    }
+    
+    func adjustInformationForIPhoneX(_ information: SKSpriteNode) {
+        information.size = CGSize(width: 690, height: 1334)
+        information.position = CGPoint(x: 0, y: 0)
     }
 }
 

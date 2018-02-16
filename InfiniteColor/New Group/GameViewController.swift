@@ -25,7 +25,7 @@ class GameViewController: UIViewController {
             if let scene = MainMenuScene(fileNamed: "MainMenuScene") {
                 // Set the scale mode to scale to fit the window
                 scene.scaleMode = .aspectFill
-                if IphoneTypeService.shared.isIphoneX() { scene.scaleMode = .fill }
+                if IphoneTypeService.shared.isIphoneX() { scene.scaleMode = .aspectFill }
 
                 // Present the scene
                 view.presentScene(scene)

@@ -211,7 +211,10 @@ class GameplayScene: SKScene {
             // end game situation
             AudioService.shared.playSoundEffect("die")
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + CircleService.shared.animationDuration*2.01, execute: { AudioService.shared.turnDownBackgroundSound() })
-            endGameSituation()
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + CircleService.shared.animationDuration*1.01, execute: { self.endGameSituation() })
+            stopOctogons()
+            lastOctogon.colorize()
+            circle.scaleDownAnimation()
         }
     }
     
@@ -232,7 +235,7 @@ class GameplayScene: SKScene {
     }
     
     func perfectMove(forPart part: Part) {
-        scoreMultiplier += 1
+        if scoreMultiplier < 100 { scoreMultiplier += 1 }
 
         let perfectMoveLabel = PerfectMoveLabel()
         perfectMoveLabel.initialize(withText: "x\(scoreMultiplier)")
@@ -395,7 +398,7 @@ extension GameplayScene {
     func presentMainMenu() {
         if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
             mainMenuScene.scaleMode = .aspectFill
-            if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .fill }
+            if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .aspectFill }
             self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }
     }
@@ -425,16 +428,19 @@ extension GameplayScene {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3.0, execute: { self.canTouch = true; self.startOctogons() })
             if let resumePanel = self.childNode(withName: "ResumePanel") as? ResumePanel { resumePanel.animate() }
         }
+        AudioService.shared.resumeBackgroundSound()
     }
     
     @objc
     func appWillResignActive() {
         self.canTouch = false
         stopOctogons()
-        createResumePanel()
+        if !canMoveToMainMenu { createResumePanel() }
+        AudioService.shared.pauseBackgrounSound()
     }
     
     func stopOctogons() {
+        setHighscore()
         for octogon in octogons { octogon.stopAnimation() }
         lastOctogon.stopIncreasing()
     }

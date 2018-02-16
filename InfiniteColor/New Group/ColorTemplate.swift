@@ -24,7 +24,7 @@ class ColorTemplate: SKSpriteNode {
         let part = OctogonService.shared.allParts[index]
 
         self.name = part.0
-        self.size = CGSize(width: 130, height: 100)
+        self.size = CGSize(width: 130 - IphoneTypeService.shared.iPhoneXColorTemplateWidth, height: 100)
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.zPosition = ZPositionService.shared.part
         setPosition(forIndex: index)
@@ -35,7 +35,7 @@ class ColorTemplate: SKSpriteNode {
     }
     
     func setPosition(forIndex index: Int) {
-        let xPosition = -300 + Double(150 * (index % 5))
+        let xPosition = -300.0 - IphoneTypeService.shared.iPhoneXColorTemplateStartingXPosition + Double((150 - IphoneTypeService.shared.iPhoneXColorTemplateDistanceBetween ) * (index % 5))
         let yPosition =  -120 - (125 * Double(index / 5))
         self.position = CGPoint(x: xPosition, y: yPosition)
     }

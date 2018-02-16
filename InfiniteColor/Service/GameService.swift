@@ -34,7 +34,9 @@ class GameService {
     func getHighestCombo() -> Int { return UserDefaults.standard.integer(forKey: "RusRazvan.InfiniteColor.highestCombo\(getGameMode())")}
     
     func set(bonusPoints points: Int) {
-        UserDefaults.standard.set(points, forKey: "RusRazvan.InfiniteColor.bonuspoints")
+        var bonusPoints = points
+        if points > 999 { bonusPoints = 999 }
+        UserDefaults.standard.set(bonusPoints, forKey: "RusRazvan.InfiniteColor.bonuspoints")
         UserDefaults.standard.synchronize()
     }
     func getBonusPoints() -> Int { return UserDefaults.standard.integer(forKey: "RusRazvan.InfiniteColor.bonuspoints") }
