@@ -31,7 +31,7 @@ class MainMenuScene: SKScene {
         if GameService.shared.getVibrationStatus() { self.childNode(withName: "VibrationButton")?.alpha = 1 }
         else { self.childNode(withName: "VibrationButton")?.alpha = 0.4 }
         AudioService.shared.turnDownBackgroundSound()
-        }
+    }
     
     func getGameMode() {
         GameService.shared.gameMode = GameService.shared.getGameMode()
@@ -41,8 +41,8 @@ class MainMenuScene: SKScene {
             if let titleExtension = self.childNode(withName: "TitleLabel")?.childNode(withName: "TitleLabelExtension") as? SKLabelNode {
                 titleExtension.alpha = 1
                 titleExtension.text = "easy"
-                titleExtension.fontSize = 70
-                titleExtension.position = CGPoint(x: 100, y: -115)
+                titleExtension.fontSize = 68
+                titleExtension.position = CGPoint(x: 118, y: -142)
             }
             OctogonService.shared.currentParts = OctogonService.shared.easyModeParts
         case .normal:
@@ -55,12 +55,12 @@ class MainMenuScene: SKScene {
             if let titleExtension = self.childNode(withName: "TitleLabel")?.childNode(withName: "TitleLabelExtension") as? SKLabelNode {
                 titleExtension.alpha = 1
                 titleExtension.text = "insane"
-                titleExtension.fontSize = 70
-                titleExtension.position = CGPoint(x: 76, y: -116)
+                titleExtension.fontSize = 68
+                titleExtension.position = CGPoint(x: 87, y: -142)
             }
         }
     }
-
+    
     
     func getLabels() {
         getHighestCombo()
@@ -114,33 +114,39 @@ class MainMenuScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if informationDisplayed { presentMainMenu() }
-        for touch in touches {
-            let location = touch.location(in: self)
-            if atPoint(location).name == "NoAdsButton" {
-                self.childNode(withName: "NotAvailablePanel")?.removeFromParent()
-                let notAvailablePanel = NotAvailablePanel()
-                notAvailablePanel.initialize()
-                notAvailablePanel.animate()
-                self.addChild(notAvailablePanel)
-            }
-            if atPoint(location).name == "InformationButton" { presentInformation() }
-            if atPoint(location).name == "TitleLabel" { GameService.shared.changeGameMode(); presentMainMenu() }
-            if atPoint(location).name == "PlayButton" || atPoint(location).parent?.name == "PlayButton" { presentGameplayScene() }
-            if atPoint(location).name == "SkinsButton" { OctogonService.shared.currentParts = OctogonService.shared.normalModeParts; presentSkinsScene() }
-            if atPoint(location).name == "VibrationButton" {
-                if !GameService.shared.getVibrationStatus() {
-                    AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-                    atPoint(location).alpha = 0.9
-                }else { atPoint(location).alpha = 0.4}
-                GameService.shared.changeVibrationStatus()
+        if informationDisplayed {
+            self.childNode(withName: "InformationMainMenuScene")?.removeFromParent(); appodealAdsDelegate.presentBanner()
+            informationDisplayed = false
+        }else {
+            for touch in touches {
+                let location = touch.location(in: self)
+                if atPoint(location).name == "NoAdsButton" {
+                    self.childNode(withName: "NotAvailablePanel")?.removeFromParent()
+                    let notAvailablePanel = NotAvailablePanel()
+                    notAvailablePanel.initialize()
+                    notAvailablePanel.animate()
+                    self.addChild(notAvailablePanel)
+                }
+                if atPoint(location).name == "InformationButton" { presentInformation() }
+                if atPoint(location).name == "TitleLabel" { GameService.shared.changeGameMode(); presentMainMenu() }
+                if atPoint(location).name == "PlayButton" || atPoint(location).parent?.name == "PlayButton" { presentGameplayScene() }
+                if atPoint(location).name == "SkinsButton" { OctogonService.shared.currentParts = OctogonService.shared.normalModeParts; presentSkinsScene() }
+                if atPoint(location).name == "VibrationButton" {
+                    if !GameService.shared.getVibrationStatus() {
+                        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+                        atPoint(location).alpha = 0.9
+                    }else { atPoint(location).alpha = 0.4}
+                    GameService.shared.changeVibrationStatus()
+                }
             }
         }
     }
     
     func presentInformation() {
+        appodealAdsDelegate.dismissBanner()
         informationDisplayed = true
         let information = SKSpriteNode(imageNamed: "InformationMainMenuScene")
+        information.name = "InformationMainMenuScene"
         information.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         if IphoneTypeService.shared.isIphoneX() { adjustInformationForIPhoneX(information)
         }else {

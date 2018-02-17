@@ -429,8 +429,8 @@ extension GameplayScene {
     @objc
     func appDidBecomeActive() {
         if !canMoveToMainMenu {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3.0, execute: { self.canTouch = true; self.startOctogons() })
-            if let resumePanel = self.childNode(withName: "ResumePanel") as? ResumePanel { resumePanel.animate() }
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1, execute: { self.canTouch = true; self.startOctogons() })
+//            if let resumePanel = self.childNode(withName: "ResumePanel") as? ResumePanel { resumePanel.animate() }
         }
         AudioService.shared.resumeBackgroundSound()
     }
@@ -439,7 +439,7 @@ extension GameplayScene {
     func appWillResignActive() {
         self.canTouch = false
         stopOctogons()
-        if !canMoveToMainMenu { createResumePanel() }
+//        if !canMoveToMainMenu { createResumePanel() }
         AudioService.shared.pauseBackgrounSound()
     }
     
@@ -494,6 +494,8 @@ extension GameplayScene {
 protocol AppodealAdsDelegate {
     func presentInterstitial()
     func presentRewardedVideo()
+    func presentBanner()
+    func dismissBanner()
 }
 
 

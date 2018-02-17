@@ -29,6 +29,7 @@ class SkinsScene: SKScene {
     var informationDisplayed = false
     
     override func didMove(to view: SKView) {
+        appodealAdsDelegate.dismissBanner()
         if IphoneTypeService.shared.isIphoneX() { initializeForIPhoneX() }
         initialize()
         initializeDelegateNotifications()
@@ -42,8 +43,8 @@ class SkinsScene: SKScene {
     
     func createLabels() {
         getBonusPoints()
-//        getAvailableSkinsNumber()
-//        getUnavailableSkinsNumber()
+        //        getAvailableSkinsNumber()
+        //        getUnavailableSkinsNumber()
     }
     
     func getBonusPoints() {
@@ -105,14 +106,18 @@ class SkinsScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if informationDisplayed { presentSkinsScene() }
-        for touch in touches {
-            let location = touch.location(in: self)
-            if atPoint(location).name == "ExitButton" { presentMainMenu() }
-            if atPoint(location).name == "InformationButton" { presentInformation() }
-            if let octogonPart = atPoint(location) as? Part { changeSelectedPart(with: octogonPart) }
-            if let colorTemplate = atPoint(location) as? ColorTemplate { colorTapped(colorTemplate) }
-            else{ if let colorTemplate = atPoint(location).parent as? ColorTemplate { colorTapped(colorTemplate) } }
+        if informationDisplayed {
+            self.childNode(withName: "InformationSkinsScene")?.removeFromParent()
+            informationDisplayed = false
+        }else {
+            for touch in touches {
+                let location = touch.location(in: self)
+                if atPoint(location).name == "ExitButton" { presentMainMenu() }
+                if atPoint(location).name == "InformationButton" { presentInformation() }
+                if let octogonPart = atPoint(location) as? Part { changeSelectedPart(with: octogonPart) }
+                if let colorTemplate = atPoint(location) as? ColorTemplate { colorTapped(colorTemplate) }
+                else{ if let colorTemplate = atPoint(location).parent as? ColorTemplate { colorTapped(colorTemplate) } }
+            }
         }
     }
     
@@ -163,6 +168,7 @@ class SkinsScene: SKScene {
     func presentInformation() {
         informationDisplayed = true
         let information = SKSpriteNode(imageNamed: "InformationSkinsScene")
+        information.name = "InformationSkinsScene"
         information.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         if IphoneTypeService.shared.isIphoneX() { adjustInformationForIPhoneX(information)
         }else {
@@ -178,11 +184,12 @@ class SkinsScene: SKScene {
         
         let sequence = SKAction.sequence([wait,change1,wait,change2])
         let repeatAction = SKAction.repeatForever(sequence)
-
+        
         information.run(repeatAction)
     }
     
     func presentMainMenu() {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.5) { self.appodealAdsDelegate.presentBanner() }
         if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
             mainMenuScene.scaleMode = .aspectFill
             if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .aspectFill }

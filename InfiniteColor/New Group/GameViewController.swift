@@ -115,6 +115,14 @@ extension GameViewController {
 
 // MARK: delegate for our own delegate protocol (AppodealAdsDelegate)
 extension GameViewController: AppodealAdsDelegate {
+    func presentBanner() {
+        showBanner()
+    }
+    
+    func dismissBanner() {
+        hideBanner()
+    }
+    
     func presentInterstitial() {
         self.showInterstitial()
     }
