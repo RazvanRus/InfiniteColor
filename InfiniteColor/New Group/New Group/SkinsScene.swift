@@ -191,8 +191,7 @@ class SkinsScene: SKScene {
     func presentMainMenu() {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.5) { self.appodealAdsDelegate.presentBanner() }
         if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
-            mainMenuScene.scaleMode = .aspectFill
-            if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .aspectFill }
+            mainMenuScene.scaleMode = GameService.shared.gameAspect
             mainMenuScene.appodealAdsDelegate = appodealAdsDelegate
             self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }
@@ -200,8 +199,7 @@ class SkinsScene: SKScene {
     
     func presentSkinsScene() {
         if let skinsScene = SkinsScene(fileNamed: "SkinsScene") {
-            if IphoneTypeService.shared.isIphoneX() { skinsScene.scaleMode = .aspectFill     }
-            else { skinsScene.scaleMode = .aspectFill }
+            skinsScene.scaleMode = GameService.shared.gameAspect
             skinsScene.appodealAdsDelegate = appodealAdsDelegate
             self.view?.presentScene(skinsScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }

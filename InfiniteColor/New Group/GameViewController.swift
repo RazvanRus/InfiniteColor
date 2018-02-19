@@ -26,8 +26,7 @@ class GameViewController: UIViewController {
             // Load the SKScene from 'GameScene.sks'
             if let scene = MainMenuScene(fileNamed: "MainMenuScene") {
                 // Set the scale mode to scale to fit the window
-                scene.scaleMode = .aspectFill
-                if IphoneTypeService.shared.isIphoneX() { scene.scaleMode = .aspectFill }
+                scene.scaleMode = GameService.shared.gameAspect
                 
                 // Present the scene
                 scene.appodealAdsDelegate  = self
@@ -47,8 +46,7 @@ class GameViewController: UIViewController {
         ReviveGameService.shared.canPlayerBeRevived = false
         if let view = self.view as? SKView {
             if let gameplayScene = GameplayScene(fileNamed: "GameplayScene") {
-                if IphoneTypeService.shared.isIphoneX() { gameplayScene.scaleMode = .aspectFill }
-                else { gameplayScene.scaleMode = .aspectFill }
+                gameplayScene.scaleMode = GameService.shared.gameAspect
                 gameplayScene.appodealAdsDelegate = self
                 view.presentScene(gameplayScene)
             }

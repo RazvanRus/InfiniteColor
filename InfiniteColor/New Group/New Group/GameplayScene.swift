@@ -399,8 +399,7 @@ extension GameplayScene {
     
     func presentMainMenu() {
         if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
-            mainMenuScene.scaleMode = .aspectFill
-            if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .aspectFill }
+            mainMenuScene.scaleMode = GameService.shared.gameAspect
             mainMenuScene.appodealAdsDelegate = appodealAdsDelegate
             self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }
@@ -408,8 +407,7 @@ extension GameplayScene {
     
     func presentGameplayScene() {
         if let gameplayScene = GameplayScene(fileNamed: "GameplayScene") {
-            if IphoneTypeService.shared.isIphoneX() { gameplayScene.scaleMode = .aspectFill }
-            else { gameplayScene.scaleMode = .aspectFill }
+            gameplayScene.scaleMode = GameService.shared.gameAspect
             gameplayScene.appodealAdsDelegate = appodealAdsDelegate
             self.view?.presentScene(gameplayScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.25)))
         }

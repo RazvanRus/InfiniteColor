@@ -8,6 +8,7 @@
 
 
 import Foundation
+import SpriteKit
 
 enum GameMode: Int {
     case easy = 1
@@ -20,6 +21,7 @@ class GameService {
     static let shared = GameService()
     
     var gameMode = GameMode.normal
+    var gameAspect: SKSceneScaleMode = SKSceneScaleMode.aspectFill
     
     func set(highscore points: Int) {
         UserDefaults.standard.set(points, forKey: "RusRazvan.InfiniteColor.highscore\(getGameMode())")

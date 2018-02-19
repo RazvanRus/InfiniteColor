@@ -168,8 +168,7 @@ class MainMenuScene: SKScene {
     
     func presentMainMenu() {
         if let mainMenuScene = MainMenuScene(fileNamed: "MainMenuScene") {
-            mainMenuScene.scaleMode = .aspectFill
-            if IphoneTypeService.shared.isIphoneX() { mainMenuScene.scaleMode = .aspectFill }
+            mainMenuScene.scaleMode = GameService.shared.gameAspect
             mainMenuScene.appodealAdsDelegate = appodealAdsDelegate
             self.view?.presentScene(mainMenuScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0)))
         }
@@ -178,8 +177,7 @@ class MainMenuScene: SKScene {
     func presentGameplayScene() {
         ReviveGameService.shared.canPlayerBeRevived = true
         if let gameplayScene = GameplayScene(fileNamed: "GameplayScene") {
-            if IphoneTypeService.shared.isIphoneX() { gameplayScene.scaleMode = .aspectFill }
-            else { gameplayScene.scaleMode = .aspectFill }
+            gameplayScene.scaleMode = GameService.shared.gameAspect
             if let actualOct = octogons.first {  gameplayScene.actualOctogon = actualOct }
             if let lastOct = octogons.last { gameplayScene.lastOctogon = lastOct }
             gameplayScene.appodealAdsDelegate = appodealAdsDelegate
@@ -189,8 +187,7 @@ class MainMenuScene: SKScene {
     
     func presentSkinsScene() {
         if let skinsScene = SkinsScene(fileNamed: "SkinsScene") {
-            if IphoneTypeService.shared.isIphoneX() { skinsScene.scaleMode = .aspectFill     }
-            else { skinsScene.scaleMode = .aspectFill }
+            skinsScene.scaleMode = GameService.shared.gameAspect
             skinsScene.appodealAdsDelegate = appodealAdsDelegate
             self.view?.presentScene(skinsScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
         }

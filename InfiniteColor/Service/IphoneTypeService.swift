@@ -21,6 +21,11 @@ class IphoneTypeService {
         return false
     }
     
+    func isTablet() -> Bool {
+        if UIDevice.current.userInterfaceIdiom == .pad { return true }
+        return false
+    }
+    
     var iPhoneXColorTemplateWidth = 0
     var iPhoneXColorTemplateDistanceBetween = 0
     var iPhoneXColorTemplateStartingXPosition = 0.0

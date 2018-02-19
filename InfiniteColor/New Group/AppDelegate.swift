@@ -19,11 +19,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         if !UserDefaults.standard.bool(forKey: "RusRazvan.InfiniteColor.noAds") {
-            Appodeal.initialize(withApiKey: "e418432912f95d959c367c8093e3aec7122f63d738c35968", types: [.banner, .interstitial, .rewardedVideo])
+            Appodeal.initialize(withApiKey: "731cda58ddca1cb63d1eedc09de50c0f28b55d1eaf6aa104", types: [.banner, .interstitial, .rewardedVideo])
         } else {
-            Appodeal.initialize(withApiKey: "e418432912f95d959c367c8093e3aec7122f63d738c35968", types: [.rewardedVideo])
+            Appodeal.initialize(withApiKey: "731cda58ddca1cb63d1eedc09de50c0f28b55d1eaf6aa104", types: [.rewardedVideo])
         }
         
+        if IphoneTypeService.shared.isTablet() { GameService.shared.gameAspect = .fill }else { GameService.shared.gameAspect = .aspectFill}
+        print(IphoneTypeService.shared.isTablet())
+        print(IphoneTypeService.shared.isIphoneX())
         return true
     }
 
