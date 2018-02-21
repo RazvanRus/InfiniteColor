@@ -21,6 +21,16 @@ class MainMenuScene: SKScene {
         initialize()
         initializeDelegateNotifications()
         if IphoneTypeService.shared.isIphoneX() { initializeForIPhoneX() }
+        
+        if UserDefaults.standard.bool(forKey: "RusRazvan.InfiniteColor.tutorial") { self.childNode(withName: "TapIcon")?.removeFromParent() }else
+        { if let icon = self.childNode(withName: "TapIcon") as? SKSpriteNode { animateIcon(icon: icon) } }
+    }
+    
+    func animateIcon(icon: SKSpriteNode) {
+        let fadeIn = SKAction.fadeAlpha(to: 1, duration: 0.75)
+        let fadeOut = SKAction.fadeAlpha(to: 0.3, duration: 0.75)
+        let repeatAction = SKAction.repeatForever(SKAction.sequence([fadeOut,fadeIn]))
+        icon.run(repeatAction)
     }
     
     func initialize() {
@@ -128,7 +138,7 @@ class MainMenuScene: SKScene {
                     self.addChild(notAvailablePanel)
                 }
                 if atPoint(location).name == "InformationButton" { presentInformation() }
-                if atPoint(location).name == "TitleLabel" { GameService.shared.changeGameMode(); presentMainMenu() }
+                if atPoint(location).name == "TitleLabel" { GameService.shared.changeGameMode(); removeTheTutorial(); presentMainMenu() }
                 if atPoint(location).name == "PlayButton" || atPoint(location).parent?.name == "PlayButton" { presentGameplayScene() }
                 if atPoint(location).name == "SkinsButton" { OctogonService.shared.currentParts = OctogonService.shared.normalModeParts; presentSkinsScene() }
                 if atPoint(location).name == "VibrationButton" {
@@ -140,6 +150,10 @@ class MainMenuScene: SKScene {
                 }
             }
         }
+    }
+    
+    func removeTheTutorial() {
+        if !UserDefaults.standard.bool(forKey: "RusRazvan.InfiniteColor.tutorial") { UserDefaults.standard.set(true, forKey: "RusRazvan.InfiniteColor.tutorial") }
     }
     
     func presentInformation() {

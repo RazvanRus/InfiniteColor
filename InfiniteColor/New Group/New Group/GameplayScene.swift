@@ -428,7 +428,7 @@ extension GameplayScene {
     func appDidBecomeActive() {
         if !canMoveToMainMenu {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1, execute: { self.canTouch = true; self.startOctogons() })
-//            if let resumePanel = self.childNode(withName: "ResumePanel") as? ResumePanel { resumePanel.animate() }
+            //            if let resumePanel = self.childNode(withName: "ResumePanel") as? ResumePanel { resumePanel.animate() }
         }
         AudioService.shared.resumeBackgroundSound()
     }
@@ -437,7 +437,7 @@ extension GameplayScene {
     func appWillResignActive() {
         self.canTouch = false
         stopOctogons()
-//        if !canMoveToMainMenu { createResumePanel() }
+        //        if !canMoveToMainMenu { createResumePanel() }
         AudioService.shared.pauseBackgrounSound()
     }
     
@@ -472,16 +472,20 @@ extension GameplayScene {
     }
     
     func tryToPresentInterstitial() {
-        let randomSourceArc = GKARC4RandomSource()
-        let randomNumber = randomSourceArc.nextInt(upperBound: 3)
-        if randomNumber == 1 {
-            if (Appodeal.isReadyForShow(with: .interstitial)) {
-                appodealAdsDelegate.presentInterstitial()
+        if let scoreText = scoreLabel?.text, let score = Int(scoreText), score < 30 - (12 * (GameService.shared.gameMode.rawValue - 1)) {
+            presentMainMenu()
+        }else {
+            let randomSourceArc = GKARC4RandomSource()
+            let randomNumber = randomSourceArc.nextInt(upperBound: 3)
+            if randomNumber == 1 {
+                if (Appodeal.isReadyForShow(with: .interstitial)) {
+                    appodealAdsDelegate.presentInterstitial()
+                }else {
+                    presentMainMenu()
+                }
             }else {
                 presentMainMenu()
             }
-        }else {
-            presentMainMenu()
         }
     }
 }

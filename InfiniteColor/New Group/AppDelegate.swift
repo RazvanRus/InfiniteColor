@@ -25,8 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         if IphoneTypeService.shared.isTablet() { GameService.shared.gameAspect = .fill }else { GameService.shared.gameAspect = .aspectFill}
-        print(IphoneTypeService.shared.isTablet())
-        print(IphoneTypeService.shared.isIphoneX())
         return true
     }
 
